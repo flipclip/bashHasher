@@ -1,6 +1,8 @@
 #!/bin/bash
 
-. CONFIG
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+. $DIR/CONFIG
 
 #Below Lies Madness. Do not change anything below.
 
