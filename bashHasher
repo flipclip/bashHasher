@@ -91,7 +91,7 @@ declare -A gputhreads_calls=( [x11]="$gputhreads_x11" [x13]="$gputhreads_x13" [x
 bpi_api_addr="https://api.coindesk.com/v1/bpi/currentprice/$currency.json"
 nicehash_api_addr="https://www.nicehash.com/api?method=stats.global.current"
 yaamp_api_addr="http://yaamp.com/api/status"
-miner_path="$miner_path$miner_name"
+miner_path="$miner_path/$miner_name"
 
 algo_array=(x11 x13 x15 nist5 neoscrypt lyra2 quark x14 fresh qubit whirlpoolx keccak skein groestl)
 service_calls=(bpi nicehash yaamp)
