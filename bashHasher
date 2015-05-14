@@ -213,6 +213,47 @@ if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp Fetch: ${service_api_fet
 btc_rate=$($json_script_path/JSON.sh <<< "${service_api_fetched[bpi]}" | egrep '\["bpi",\"'$currency'\","rate"\]' | cut -d ' ' -f 2 | awk -F\" '{print $(NF-1)}')
 btc_rate_clean=${btc_rate/,}
 
+compute_return () {
+service_test="$1"
+i="$2"
+if [ "$service_test" == "nicehash" ]
+then
+pay=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_test}]}" | egrep "\[\"result\",\"stats\",${service_api_calls[$service_test${algo_array[$i]}]},\"price\"\]" | cut -d ' ' -f 2 | awk -F\" '{print $(NF-1)}' )
+if [ -z "$pay" ]
+then
+if [ ! -z "${logging+1}" ] ; then echo "$log_time NiceHash does not use algo ${algo_array[$i]}." >> $script_path/log ; fi
+net="0"
+echo "$net"
+continue
+fi
+elif [ "$service_test" == "yaamp" ]
+then
+coin_test=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_test}]}" | egrep "\[\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"coins\"\]" | cut -d ' ' -f 1 | awk -F\"\] '{print $(NF)}' )
+if [ -z "$coin_test" ]
+then
+if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp does not use algo ${algo_array[$i]}." >> $script_path/log ; fi
+net="0"
+echo "$net"
+continue
+elif [ "$coin_test" -eq "0" ]
+then
+if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp has zero coins using ${algo_array[$i]}. Skipping." >> $script_path/log ; fi
+net="0"
+echo "$net"
+continue
+else
+if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp has $coin_test coins using ${algo_array[$i]}." >> $script_path/log ; fi
+pay=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_test}]}" | egrep "\[\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"estimate_current\"\]" | cut -d ' ' -f 1 | awk -F\"\] '{print $(NF)}' )
+fi
+fi
+gross=$(bc <<< "scale=9;$pay/${service_pay_rate[$service_test]}*${hash_calls[${algo_array[$i]}]}")
+if [ ! -z "${logging+1}" ] ; then echo "$log_time $service_test : ${algo_array[$i]} : Future Pay (gross) = $gross"  >> $script_path/log ; fi
+mining_cost=$(bc <<< "scale=9;${watt_calls[${algo_array[$i]}]}/1000*$kWh_cost*24")
+btc_need=$(bc <<< "scale=9;$mining_cost/$btc_rate_clean")
+net=$(bc <<< "scale=9;$gross-$btc_need")
+echo "$net"
+}
+
 #services loop for price comparison
 for (( j=1 ; j < ${service_len} ; j++ ));
 do
@@ -230,36 +271,11 @@ then
 if [ ! -z "${logging+1}" ] ; then echo "$log_time Algo ${algo_array[$i]} skipped." >> $script_path/log ; fi
 continue
 fi
-if [ "$service_test" == "nicehash" ]
-then
-pay=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_test}]}" | egrep "\[\"result\",\"stats\",${service_api_calls[$service_test${algo_array[$i]}]},\"price\"\]" | cut -d ' ' -f 2 | awk -F\" '{print $(NF-1)}' )
-if [ -z "$pay" ]
-then
-if [ ! -z "${logging+1}" ] ; then echo "$log_time NiceHash does not use algo ${algo_array[$i]}." >> $script_path/log ; fi
-continue
+mining_return=$(compute_return "$service_test" "$i")
+if [ ! -z "${logging+1}" ]
+then 
+if [ "$mining_return" != "0" ] ; then echo "$log_time $service_test : ${algo_array[$i]} : Future Pay (net) = $mining_return"  >> $script_path/log ; fi
 fi
-elif [ "$service_test" == "yaamp" ]
-then
-coin_test=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_test}]}" | egrep "\[\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"coins\"\]" | cut -d ' ' -f 1 | awk -F\"\] '{print $(NF)}' )
-if [ -z "$coin_test" ]
-then
-if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp does not use algo ${algo_array[$i]}." >> $script_path/log ; fi
-continue
-elif [ "$coin_test" -eq "0" ]
-then
-if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp has zero coins using ${algo_array[$i]}. Skipping." >> $script_path/log ; fi
-continue
-else
-if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp has $coin_test coins using ${algo_array[$i]}." >> $script_path/log ; fi
-pay=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_test}]}" | egrep "\[\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"estimate_current\"\]" | cut -d ' ' -f 1 | awk -F\"\] '{print $(NF)}' )
-fi
-fi
-gross=$(bc <<< "scale=9;$pay/${service_pay_rate[$service_test]}*${hash_calls[${algo_array[$i]}]}")
-if [ ! -z "${logging+1}" ] ; then echo "$log_time $service_test : ${algo_array[$i]} : Future Pay (gross) = $gross"  >> $script_path/log ; fi
-mining_cost=$(bc <<< "scale=9;${watt_calls[${algo_array[$i]}]}/1000*$kWh_cost*24")
-btc_need=$(bc <<< "scale=9;$mining_cost/$btc_rate_clean")
-mining_return=$(bc <<< "scale=9;$gross-$btc_need")
-if [ ! -z "${logging+1}" ] ; then echo "$log_time $service_test : ${algo_array[$i]} : Future Pay (net) = $mining_return"  >> $script_path/log ; fi
 if (( $(bc <<< "$mining_return > $largest") == 1 )) ; then largest=$mining_return ; port_use=${service_port[$service_test${algo_array[$i]}]} ; algo_use=${algo_array[$i]} ; service_use="$service_test" ; url=${service_url[$service_test]} ; fi
 #end price comparison loop
 done
@@ -286,24 +302,7 @@ for (( m = 0; m < ${#algo_array[@]}; m++ )); do
        i=$m;
    fi
 done
-if [ "$service_in_use" == "nicehash" ]
-then
-if [ ! -z "${logging+1}" ] ; then echo "$log_time algo number = $i"  >> $script_path/log ; fi
-if [ ! -z "${logging+1}" ] ; then echo "$log_time service test = $service_in_use"  >> $script_path/log ; fi
-pay=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_in_use}]}" | egrep "\[\"result\",\"stats\",${service_api_calls[$service_in_use${algo_array[$i]}]},\"price\"\]" | cut -d ' ' -f 2 | awk -F\" '{print $(NF-1)}' )
-if [ ! -z "${logging+1}" ] ; then echo "$log_time API paytest = $pay"  >> $script_path/log ; fi
-elif [ "$service_in_use" == "yaamp" ]
-then
-if [ ! -z "${logging+1}" ] ; then echo "$log_time algo number = $i"  >> $script_path/log ; fi
-if [ ! -z "${logging+1}" ] ; then echo "$log_time service test = $service_in_use"  >> $script_path/log ; fi
-pay=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_in_use}]}" | egrep "\[\"${service_api_calls[$service_in_use${algo_array[$i]}]}\",\"estimate_current\"\]" | cut -d ' ' -f 1 | awk -F\"\] '{print $(NF)}' )
-if [ ! -z "${logging+1}" ] ; then echo "$log_time API paytest = $pay"  >> $script_path/log ; fi
-fi
-if [ ! -z "${logging+1}" ] ; then echo "$log_time Service in use: $service_in_use : ${algo_array[$i]} Currently API paying = $pay"  >> $script_path/log ; fi
-gross=$(bc <<< "scale=9;$pay/${service_pay_rate[$service_in_use]}*${hash_calls[${algo_array[$i]}]}")
-mining_cost=$(bc <<< "scale=9;${watt_calls[${algo_array[$i]}]}/1000*$kWh_cost*24")
-btc_need=$(bc <<< "scale=9;$mining_cost/$btc_rate_clean")
-current_mining_return=$(bc <<< "scale=9;$gross-$btc_need")
+current_mining_return=$(compute_return "$service_in_use" "$i")
 changing=0
 if [ ! -z "${logging+1}" ] ; then echo "$log_time Largest is: $largest" >> $script_path/log ; fi
 if [ ! -z "${logging+1}" ] ; then echo "$log_time Current Mining Return is: $current_mining_return" >> $script_path/log ; fi
