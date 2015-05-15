@@ -206,7 +206,7 @@ skip[${service_calls[$api]}]="1"
 fi
 done
 
-if [ ${skip[bpi]} == "1" ]
+if [ "${skip[bpi]}" == "1" ]
 then
 if [ ! -z "${logging+1}" ] ; then echo "$log_time BPI Fetch Failed.  Using default Bitcoin value: $btc_default" >> $script_path/log ; fi
 btc_rate_clean="$btc_default"
