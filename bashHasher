@@ -206,12 +206,17 @@ skip[${service_calls[$api]}]="1"
 fi
 done
 
+if test "${skip[${service_calls[bpi]}]+1}"
+then
+if [ ! -z "${logging+1}" ] ; then echo "$log_time BPI Fetch Failed.  Using default Bitcoin value: $btc_default" >> $script_path/log ; fi
+btc_rate_clean="$btc_default"
+else
 if [ ! -z "${logging+1}" ] ; then echo "$log_time BPI Fetch: ${service_api_fetched[bpi]}" >> $script_path/log ; fi
-if [ ! -z "${logging+1}" ] ; then echo "$log_time NiceHash Fetch: ${service_api_fetched[nicehash]}" >> $script_path/log ; fi
-if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp Fetch: ${service_api_fetched[yaamp]}" >> $script_path/log ; fi
-
 btc_rate=$($json_script_path/JSON.sh <<< "${service_api_fetched[bpi]}" | egrep '\["bpi",\"'$currency'\","rate"\]' | cut -d ' ' -f 2 | awk -F\" '{print $(NF-1)}')
 btc_rate_clean=${btc_rate/,}
+fi
+if [ ! -z "${logging+1}" ] ; then echo "$log_time NiceHash Fetch: ${service_api_fetched[nicehash]}" >> $script_path/log ; fi
+if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp Fetch: ${service_api_fetched[yaamp]}" >> $script_path/log ; fi
 
 compute_return () {
 service_test="$1"
