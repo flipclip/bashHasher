@@ -97,6 +97,9 @@ watt_blake="0"
 #your energy cost per kilowatt-hour (kWh) (example, for twelve cents: .12)
 kWh_cost="0"
 
+#if coindesk api down, what is the default value of bitcoin to use in your fiat
+btc_default="230"
+
 #switch algo and/or service if the price difference (%) is more then this value (default: 15)
 use_difference="15"
 
