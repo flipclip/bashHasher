@@ -173,12 +173,14 @@ user="$btc_addr"
 pwd="$ny_pwd"
 algo="$1"
 url="$2"
+service="$3"
+if [ "$service" == "nicehash" ] ; then url="stratum+tcp://$algo.$2"; else url="stratum+tcp://$2"; fi
 if [ ! "${intensity_calls[$algo]}" = "0" ] ; then optional_inten="--intensity=${intensity_calls[$algo]}"; else optional_inten=""; fi
 if [ ! "${gputhreads_calls[$algo]}" = "1" ] ; then optional_gpu="-g ${gputhreads_calls[$algo]}"; else optional_gpu=""; fi
 if [ -z ${miner_IP+x} ]; then optional_api="" ; else optional_api="--api-bind $miner_IP:$miner_port"; fi
 if [ -z ${other_cmd+x} ]; then optional_cmd="" ; else optional_cmd="$other_cmd"; fi
 /usr/bin/screen -m -d -S mining "$miner_path" $optional_inten $optional_gpu --algo="$algo" --url="$url" --user="$user" --pass="$pwd" $optional_api $optional_cmd
-if [ ! -z "${logging+1}" ] ; then echo "$log_time $1 $2 $user $pwd ${intensity_calls[$algo]}" >> $script_path/log ; fi
+if [ ! -z "${logging+1}" ] ; then echo "$log_time $1 $3 $user $pwd ${intensity_calls[$algo]}" >> $script_path/log ; fi
 }
 
 for (( api=0 ; api < $service_api_len ; api++ ));
