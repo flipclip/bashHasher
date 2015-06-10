@@ -169,11 +169,13 @@ fi
 
 miner_kill () {
 if [ ! -z "${find_pid}" ] ; then kill -9 $find_pid ; fi
-user="$btc_addr"
+service="$3"
+IFS=, read -a mining_sum <<< "${mining_addr}"
+unset IFS
+if [ ${#mining_sum[@]} -gt 1 ] && [ "$service" == "yaamp" ] ; then user=${mining_sum[1]} ; else user=${mining_sum[0]}; fi
 pwd="$ny_pwd"
 algo="$1"
 url="$2"
-service="$3"
 if [ "$service" == "nicehash" ] ; then url="stratum+tcp://$algo.$2"; else url="stratum+tcp://$2"; fi
 if [ ! "${intensity_calls[$algo]}" = "0" ] ; then optional_inten="--intensity=${intensity_calls[$algo]}"; else optional_inten=""; fi
 if [ ! "${gputhreads_calls[$algo]}" = "1" ] ; then optional_gpu="-g ${gputhreads_calls[$algo]}"; else optional_gpu=""; fi
