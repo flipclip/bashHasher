@@ -30,6 +30,12 @@ script_path=""
 #JSON.sh script install directory
 json_script_path=""
 
+#nvidia-settings path
+#USE AT OWN RISK
+#USED FOR OVER-/UNDER-CLOCKING OF CARDS
+#IF YOU DON'T WANT TO OVER-/UNDER-CLOCK LEAVE AS IS
+nv_path=""
+
 #your hashing speed (khash/s) per algorithm
 hash_x11=""
 hash_x13=""
@@ -98,6 +104,44 @@ watt_whirlpoolx="0"
 watt_skein="0"
 watt_groestl="0"
 watt_blake="0"
+
+#overclock gpu graphics clock via nvidia-settings
+#amount in MHz to over-/under-clock the graphics clock
+#per card setting with comma
+gfx_x11=""
+gfx_x13=""
+gfx_x15=""
+gfx_nist5=""
+gfx_x14=""
+gfx_neoscrypt=""
+gfx_lyra2=""
+gfx_quark=""
+gfx_fresh=""
+gfx_qubit=""
+gfx_keccak=""
+gfx_whirlpoolx=""
+gfx_skein=""
+gfx_groestl=""
+gfx_blake=""
+
+#overclock gpu memory transfer via nvidia-settings
+#amount in MHz to over-/under-clock the memory transfer rate
+#per card setting with comma
+mem_x11=""
+mem_x13=""
+mem_x15=""
+mem_nist5=""
+mem_x14=""
+mem_neoscrypt=""
+mem_lyra2=""
+mem_quark=""
+mem_fresh=""
+mem_qubit=""
+mem_keccak=""
+mem_whirlpoolx=""
+mem_skein=""
+mem_groestl=""
+mem_blake=""
 
 #your energy cost per kilowatt-hour (kWh) (example, for twelve cents: .12)
 kWh_cost="0"
