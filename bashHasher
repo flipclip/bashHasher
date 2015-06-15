@@ -199,7 +199,7 @@ if [ ! "${gputhreads_calls[$algo]}" = "1" ] ; then optional_gpu="-g ${gputhreads
 if [ -z ${miner_IP+x} ]; then optional_api="" ; else optional_api="--api-bind $miner_IP:$miner_port"; fi
 if [ -z ${other_cmd+x} ]; then optional_cmd="" ; else optional_cmd="$other_cmd"; fi
 if [ -n "$nv_path" ]; then overclock "$algo" ; fi
-/usr/bin/screen -m -d -S mining "$miner_path" $optional_inten $optional_gpu --algo="$algo" --url="$url" --user="$user" --pass="$pwd" $optional_api $optional_cmd
+$screen_path/screen -m -d -S mining "$miner_path" $optional_inten $optional_gpu --algo="$algo" --url="$url" --user="$user" --pass="$pwd" $optional_api $optional_cmd
 if [ ! -z "${logging+1}" ] ; then echo "$log_time $1 $3 $user $pwd ${intensity_calls[$algo]}" >> $script_path/log ; fi
 }
 
