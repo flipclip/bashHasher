@@ -30,6 +30,9 @@ script_path=""
 #JSON.sh script install directory
 json_script_path=""
 
+#screen path
+screen_path="/usr/bin"
+
 #nvidia-settings path
 #USE AT OWN RISK
 #USED FOR OVER-/UNDER-CLOCKING OF CARDS
