@@ -24,6 +24,7 @@ NORMALIZE_NUMBERS_STRIP=0
 EXTRACT_JPATH=""
 TOXIC_NEWLINE=0
 COOKASTRING=0
+VAR=0
 
 usage() {
   echo
@@ -198,6 +199,8 @@ parse_options() {
       -d=*) DEBUG="`echo "$1" | sed 's,^-d=,,'`"
       ;;
       -Q) COOKASTRING=1
+      ;;
+      -var) VAR=1
       ;;
       ?*) echo "ERROR: Unknown option '$1'."
           usage
@@ -490,7 +493,7 @@ parse_value () {
 	"JPATH='$jpath' VALUE='$value' B='$BRIEF'" \
 	"isleaf='$isleaf'/L='$LEAFONLY' isempty='$isempty'/P='$PRUNE':" \
 	"print='$print'" >&2
-
+  [ "$print" -gt 0 ] && [ "$VAR" -eq 1 ] && printf "%s\n" $value
   [ "$print" -gt 0 ] && printf "[%s]\t%s\n" "$jpath" "$value"
   :
 }
