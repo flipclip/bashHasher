@@ -494,7 +494,7 @@ parse_value () {
 	"isleaf='$isleaf'/L='$LEAFONLY' isempty='$isempty'/P='$PRUNE':" \
 	"print='$print'" >&2
   [ "$print" -gt 0 ] && [ "$VAR" -eq 1 ] && printf "%s\n" $value
-  [ "$print" -gt 0 ] && printf "[%s]\t%s\n" "$jpath" "$value"
+  [ "$print" -gt 0 ] && [ "$VAR" -eq 0 ] && printf "[%s]\t%s\n" "$jpath" "$value"
   :
 }
 
