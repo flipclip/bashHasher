@@ -33,6 +33,13 @@ json_script_path=""
 #screen path
 screen_path="/usr/bin"
 
+#curl path
+curl_path="/usr/bin"
+
+#curl timeout (seconds)
+#how long to wait per api call to nicehash, yaamp, etc
+curl_time="15"
+
 #nvidia-settings path
 #USE AT OWN RISK
 #USED FOR OVER-/UNDER-CLOCKING OF CARDS
