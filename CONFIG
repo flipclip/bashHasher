@@ -168,5 +168,5 @@ ny_pwd="x"
 #nicehash_url="eu.nicehash.com:"
 #nicehash_url="usa.nicehash.com:"
 
-#yaamp.com stratum url
+#ffpool.net stratum url
 ffpool_url="ffpool.net:"
