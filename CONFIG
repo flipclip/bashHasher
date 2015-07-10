@@ -27,9 +27,6 @@ other_cmd=""
 #bashHasher script install directory
 script_path=""
 
-#JSON.sh script install directory
-json_script_path=""
-
 #screen path
 screen_path="/usr/bin"
 
