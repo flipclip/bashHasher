@@ -14,8 +14,8 @@ case $i in
     skip[nicehash]="1"
     shift
     ;;
-    --skipyaamp)
-    skip[yaamp]="1"
+    --skipffpool)
+    skip[ffpool]="1"
     shift
     ;;
     --skipx11)
@@ -98,16 +98,16 @@ declare -A gfx_calls=( [x11]="$gfx_x11" [x13]="$gfx_x13" [x15]="$gfx_x15" [nist5
 declare -A mem_calls=( [x11]="$mem_x11" [x13]="$mem_x13" [x15]="$mem_x15" [nist5]="$mem_nist5" [neoscrypt]="$mem_neoscrypt" [lyra2]="$mem_lyra2" [quark]="$mem_quark" [x14]="$mem_x14" [fresh]="$mem_fresh" [qubit]="$mem_qubit" [keccak]="$mem_keccak" [whirlpoolx]="$mem_whirlpoolx" [skein]="$mem_skein" [groestl]="$mem_groestl" [blake]="$mem_blake")
 bpi_api_addr="https://api.coindesk.com/v1/bpi/currentprice/$currency.json"
 nicehash_api_addr="https://www.nicehash.com/api?method=stats.global.current"
-yaamp_api_addr="http://yaamp.com/api/status"
+ffpool_api_addr="http://ffpool.net/api/status"
 miner_path="$miner_path/$miner_name"
 
 algo_array=(x11 x13 x15 nist5 neoscrypt lyra2 quark x14 fresh qubit whirlpoolx keccak skein groestl blake)
-service_calls=(bpi nicehash yaamp)
-declare -A service_api_calls=( [nicehashx11]="3" [nicehashx13]="4" [nicehashkeccak]="5" [nicehashx15]="6" [nicehashnist5]="7" [nicehashneoscrypt]="8" [nicehashlyra2]="9" [nicehashwhirlpoolx]="10" [nicehashqubit]="11" [nicehashquark]="12" [yaampx11]="x11" [yaampx13]="x13" [yaampx15]="x15" [yaampneoscrypt]="neoscrypt" [yaamplyra2]="lyra2" [yaampquark]="quark" [yaampx14]="x14" [yaampfresh]="fresh" [yaampqubit]="qubit" [yaampskein]="skein" [yaampgroestl]="groestl" [yaampblake]="blake")
-declare -A service_url=( [nicehash]=$nicehash_url [yaamp]=$yaamp_url )
-declare -A service_pay_rate=( [nicehash]=1000000 [yaamp]=1000 )
-declare -A service_port=( [nicehashx11]=3336 [nicehashx13]=3337 [nicehashkeccak]=3338 [nicehashx15]=3339 [nicehashnist5]=3340 [nicehashneoscrypt]=3341 [nicehashlyra2]=3342 [nicehashwhirlpoolx]=3343 [nicehashqubit]=3344 [nicehashquark]=3345 [yaampx11]=3533 [yaampx13]=3633 [yaampx15]=3733 [yaampnist5]=3833 [yaampx14]=3933 [yaampneoscrypt]=4233 [yaamplyra2]=4433 [yaampquark]=4033 [yaampfresh]=4133 [yaampqubit]=4733 [yaampskein]=4933 [yaampgroestl]=5033 [yaampblake]=4533)
-declare -A service_api_addr=( [bpi]=$bpi_api_addr [nicehash]=$nicehash_api_addr [yaamp]=$yaamp_api_addr )
+service_calls=(bpi nicehash ffpool)
+declare -A service_api_calls=( [nicehashx11]="3" [nicehashx13]="4" [nicehashkeccak]="5" [nicehashx15]="6" [nicehashnist5]="7" [nicehashneoscrypt]="8" [nicehashlyra2]="9" [nicehashwhirlpoolx]="10" [nicehashqubit]="11" [nicehashquark]="12" [ffpoolx11]="x11" [ffpoolx13]="x13" [ffpoolx15]="x15" [ffpoolneoscrypt]="neoscrypt" [ffpoollyra2]="lyra2" [ffpoolquark]="quark" [ffpoolx14]="x14" [ffpoolfresh]="fresh" [ffpoolqubit]="qubit" [ffpoolskein]="skein" [ffpoolgroestl]="groestl" [ffpoolblake]="blake")
+declare -A service_url=( [nicehash]=$nicehash_url [ffpool]=$ffpool_url )
+declare -A service_pay_rate=( [nicehash]=1000000 [ffpool]=1000 )
+declare -A service_port=( [nicehashx11]=3336 [nicehashx13]=3337 [nicehashkeccak]=3338 [nicehashx15]=3339 [nicehashnist5]=3340 [nicehashneoscrypt]=3341 [nicehashlyra2]=3342 [nicehashwhirlpoolx]=3343 [nicehashqubit]=3344 [nicehashquark]=3345 [ffpoolx11]=3533 [ffpoolx13]=3633 [ffpoolx15]=3733 [ffpoolnist5]=3833 [ffpoolx14]=3933 [ffpoolneoscrypt]=4233 [ffpoollyra2]=4433 [ffpoolquark]=4033 [ffpoolfresh]=4133 [ffpoolqubit]=4733 [ffpoolskein]=4933 [ffpoolgroestl]=5033 [ffpoolblake]=4533)
+declare -A service_api_addr=( [bpi]=$bpi_api_addr [nicehash]=$nicehash_api_addr [ffpool]=$ffpool_api_addr )
 declare -A service_api_fetched
 service_api_len=${#service_api_addr[@]}
 algo_len=${#algo_array[@]}
@@ -189,7 +189,7 @@ if [ ! -z "${find_pid}" ] ; then kill -9 $find_pid ; fi
 service="$3"
 IFS=, read -a mining_sum <<< "${mining_addr}"
 unset IFS
-if [ ${#mining_sum[@]} -gt 1 ] && [ "$service" == "yaamp" ] ; then user=${mining_sum[1]} ; else user=${mining_sum[0]}; fi
+if [ ${#mining_sum[@]} -gt 1 ] && [ "$service" == "ffpool" ] ; then user=${mining_sum[1]} ; else user=${mining_sum[0]}; fi
 pwd="$ny_pwd"
 algo="$1"
 url="$2"
@@ -238,7 +238,7 @@ btc_rate=$($script_path/JSON.sh/JSON.sh -x '\"bpi\",\"USD\",\"rate_float\"' -var
 btc_rate_clean=${btc_rate/,}
 fi
 if [ ! -z "${logging+1}" ] ; then echo "$log_time NiceHash Fetch: ${service_api_fetched[nicehash]}" >> $script_path/log ; fi
-if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp Fetch: ${service_api_fetched[yaamp]}" >> $script_path/log ; fi
+if [ ! -z "${logging+1}" ] ; then echo "$log_time ffpool Fetch: ${service_api_fetched[ffpool]}" >> $script_path/log ; fi
 
 compute_return () {
 service_test="$1"
@@ -255,23 +255,23 @@ net="0"
 echo "$net"
 continue
 fi
-elif [ "$service_test" == "yaamp" ]
+elif [ "$service_test" == "ffpool" ]
 then
 coin_test=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_test}]}" | egrep "\[\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"coins\"\]" | cut -d ' ' -f 1 | awk -F\"\] '{print $(NF)}' )
 if [ -z "$coin_test" ]
 then
-if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp does not use algo ${algo_array[$i]}." >> $script_path/log ; fi
+if [ ! -z "${logging+1}" ] ; then echo "$log_time ffpool does not use algo ${algo_array[$i]}." >> $script_path/log ; fi
 net="0"
 echo "$net"
 continue
 elif [ "$coin_test" -eq "0" ]
 then
-if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp has zero coins using ${algo_array[$i]}. Skipping." >> $script_path/log ; fi
+if [ ! -z "${logging+1}" ] ; then echo "$log_time ffpool has zero coins using ${algo_array[$i]}. Skipping." >> $script_path/log ; fi
 net="0"
 echo "$net"
 continue
 else
-if [ ! -z "${logging+1}" ] ; then echo "$log_time Yaamp has $coin_test coins using ${algo_array[$i]}." >> $script_path/log ; fi
+if [ ! -z "${logging+1}" ] ; then echo "$log_time ffpool has $coin_test coins using ${algo_array[$i]}." >> $script_path/log ; fi
 pay=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_test}]}" | egrep "\[\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"estimate_current\"\]" | cut -d ' ' -f 1 | awk -F\"\] '{print $(NF)}' )
 fi
 fi
