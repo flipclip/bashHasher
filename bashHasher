@@ -234,7 +234,7 @@ if [ ! -z "${logging+1}" ] ; then echo "$log_time BPI Fetch Failed.  Using defau
 btc_rate_clean="$btc_default"
 else
 if [ ! -z "${logging+1}" ] ; then echo "$log_time BPI Fetch: ${service_api_fetched[bpi]}" >> $script_path/log ; fi
-btc_rate=$($json_script_path/JSON.sh <<< "${service_api_fetched[bpi]}" | egrep '\["bpi",\"'$currency'\","rate"\]' | cut -d ' ' -f 2 | awk -F\" '{print $(NF-1)}')
+btc_rate=$($script_path/JSON.sh/JSON.sh -x '\"bpi\",\"USD\",\"rate_float\"' -var <<< "${service_api_fetched[bpi]}")
 btc_rate_clean=${btc_rate/,}
 fi
 if [ ! -z "${logging+1}" ] ; then echo "$log_time NiceHash Fetch: ${service_api_fetched[nicehash]}" >> $script_path/log ; fi
@@ -245,7 +245,9 @@ service_test="$1"
 i="$2"
 if [ "$service_test" == "nicehash" ]
 then
-pay=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_test}]}" | egrep "\[\"result\",\"stats\",${service_api_calls[$service_test${algo_array[$i]}]},\"price\"\]" | cut -d ' ' -f 2 | awk -F\" '{print $(NF-1)}' )
+pay=$($script_path/JSON.sh/JSON.sh -x "\"result\",\"stats\",${service_api_calls[$service_test${algo_array[$i]}]},\"price\"" -var <<< "${service_api_fetched[${service_test}]}")
+pay_temp="${pay%\"}"
+pay="${pay_temp#\"}"
 if [ -z "$pay" ]
 then
 if [ ! -z "${logging+1}" ] ; then echo "$log_time NiceHash does not use algo ${algo_array[$i]}." >> $script_path/log ; fi
