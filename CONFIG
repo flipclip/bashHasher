@@ -170,3 +170,6 @@ ny_pwd="x"
 
 #ffpool.net stratum url
 ffpool_url="ffpool.net:"
+
+#hashpower.co stratum url
+hashpower_url="hashpower.co:"
