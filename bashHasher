@@ -270,7 +270,7 @@ continue
 fi
 elif [ "$service_test" == "ffpool" ] || [ "$service_test" == "hashpower" ]
 then
-coin_test=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_test}]}" | egrep "\[\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"coins\"\]" | cut -d ' ' -f 1 | awk -F\"\] '{print $(NF)}' )
+coin_test=$($script_path/JSON.sh/JSON.sh -x "\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"coins\"" -var <<< "${service_api_fetched[${service_test}]}")
 if [ -z "$coin_test" ]
 then
 if [ ! -z "${logging+1}" ] ; then echo "$log_time $service_test does not use algo ${algo_array[$i]}." >> $script_path/log ; fi
@@ -285,7 +285,7 @@ echo "$net"
 continue
 else
 if [ ! -z "${logging+1}" ] ; then echo "$log_time $service_test has $coin_test coins using ${algo_array[$i]}." >> $script_path/log ; fi
-pay=$( $json_script_path/JSON.sh <<< "${service_api_fetched[${service_test}]}" | egrep "\[\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"estimate_current\"\]" | cut -d ' ' -f 1 | awk -F\"\] '{print $(NF)}' )
+pay=$($script_path/JSON.sh/JSON.sh -x "\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"estimate_current\"" -var <<< "${service_api_fetched[${service_test}]}")
 fi
 fi
 gross=$(bc <<< "scale=9;$pay/${service_pay_rate[$service_test]}*${hash_calls[${algo_array[$i]}]}")
