@@ -4,6 +4,13 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 . $DIR/CONFIG
 
+config_test="1.0"
+if [ "$config_ver" != "$config_test" ]
+then 
+echo "CONFIG version not correct.  Make sure CONFIG is version $config_test. Exiting" 
+exit 1
+fi
+
 #Below Lies Madness. Do not change anything below.
 
 declare -A skip
