@@ -173,3 +173,7 @@ ffpool_url="ffpool.net:"
 
 #hashpower.co stratum url
 hashpower_url="hashpower.co:"
+
+#CONFIG version
+#DO NOT CHANGE
+config_ver="1.0"
