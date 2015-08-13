@@ -4,7 +4,7 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 . $DIR/CONFIG
 
-config_test="1.0"
+config_test="1.1"
 if [ "$config_ver" != "$config_test" ]
 then 
 echo "CONFIG version not correct.  Make sure CONFIG is version $config_test. Exiting" 
@@ -89,6 +89,10 @@ case $i in
     skip[blake]="1"
     shift
     ;;
+    --skiplyra2v2)
+    skip[blake]="1"
+    shift
+    ;;
     --debug)
     logging="1"
     shift
@@ -101,21 +105,21 @@ done
 
 log_time=$(date +"%m-%d-%y %T")
 largest=-10000
-declare -A hash_calls=( [x11]="$hash_x11" [x13]="$hash_x13" [x15]="$hash_x15" [nist5]="$hash_nist5" [neoscrypt]="$hash_neoscrypt" [lyra2]="$hash_lyra2" [quark]="$hash_quark" [x14]="$hash_x14" [fresh]="$hash_fresh" [qubit]="$hash_qubit" [keccak]="$hash_keccak" [whirlpoolx]="$hash_whirlpoolx" [skein]="$hash_skein" [groestl]="$hash_groestl" [blake]="$hash_blake")
-declare -A watt_calls=( [x11]="$watt_x11" [x13]="$watt_x13" [x15]="$watt_x15" [nist5]="$watt_nist5" [neoscrypt]="$watt_neoscrypt" [lyra2]="$watt_lyra2" [quark]="$watt_quark" [x14]="$watt_x14" [fresh]="$watt_fresh" [qubit]="$watt_qubit" [keccak]="$watt_keccak" [whirlpoolx]="$watt_whirlpoolx"  [skein]="$watt_skein" [groestl]="$watt_groestl" [blake]="$watt_blake")
-declare -A intensity_calls=( [x11]="$inten_x11" [x13]="$inten_x13" [x15]="$inten_x15" [nist5]="$inten_nist5" [neoscrypt]="$inten_neoscrypt" [lyra2]="$inten_lyra2" [quark]="$inten_quark" [x14]="$inten_x14" [fresh]="$inten_fresh" [qubit]="$inten_qubit" [keccak]="$inten_keccak" [whirlpoolx]="$inten_whirlpoolx" [skein]="$inten_skein" [groestl]="$inten_groestl" [blake]="$inten_blake")
-declare -A gputhreads_calls=( [x11]="$gputhreads_x11" [x13]="$gputhreads_x13" [x15]="$gputhreads_x15" [nist5]="$gputhreads_nist5" [neoscrypt]="$gputhreads_neoscrypt" [lyra2]="$gputhreads_lyra2" [quark]="$gputhreads_quark" [x14]="$gputhreads_x14" [fresh]="$gputhreads_fresh" [qubit]="$gputhreads_qubit" [keccak]="$gputhreads_keccak" [whirlpoolx]="$gputhreads_whirlpoolx" [skein]="$gputhreads_skein" [groestl]="$gputhreads_groestl" [blake]="$gputhreads_blake")
-declare -A gfx_calls=( [x11]="$gfx_x11" [x13]="$gfx_x13" [x15]="$gfx_x15" [nist5]="$gfx_nist5" [neoscrypt]="$gfx_neoscrypt" [lyra2]="$gfx_lyra2" [quark]="$gfx_quark" [x14]="$gfx_x14" [fresh]="$gfx_fresh" [qubit]="$gfx_qubit" [keccak]="$gfx_keccak" [whirlpoolx]="$gfx_whirlpoolx" [skein]="$gfx_skein" [groestl]="$gfx_groestl" [blake]="$gfx_blake")
-declare -A mem_calls=( [x11]="$mem_x11" [x13]="$mem_x13" [x15]="$mem_x15" [nist5]="$mem_nist5" [neoscrypt]="$mem_neoscrypt" [lyra2]="$mem_lyra2" [quark]="$mem_quark" [x14]="$mem_x14" [fresh]="$mem_fresh" [qubit]="$mem_qubit" [keccak]="$mem_keccak" [whirlpoolx]="$mem_whirlpoolx" [skein]="$mem_skein" [groestl]="$mem_groestl" [blake]="$mem_blake")
+declare -A hash_calls=( [x11]="$hash_x11" [x13]="$hash_x13" [x15]="$hash_x15" [nist5]="$hash_nist5" [neoscrypt]="$hash_neoscrypt" [lyra2]="$hash_lyra2" [quark]="$hash_quark" [x14]="$hash_x14" [fresh]="$hash_fresh" [qubit]="$hash_qubit" [keccak]="$hash_keccak" [whirlpoolx]="$hash_whirlpoolx" [skein]="$hash_skein" [groestl]="$hash_groestl" [blake]="$hash_blake" [lyra2v2]="$hash_lyra2v2")
+declare -A watt_calls=( [x11]="$watt_x11" [x13]="$watt_x13" [x15]="$watt_x15" [nist5]="$watt_nist5" [neoscrypt]="$watt_neoscrypt" [lyra2]="$watt_lyra2" [quark]="$watt_quark" [x14]="$watt_x14" [fresh]="$watt_fresh" [qubit]="$watt_qubit" [keccak]="$watt_keccak" [whirlpoolx]="$watt_whirlpoolx"  [skein]="$watt_skein" [groestl]="$watt_groestl" [blake]="$watt_blake" [lyra2v2]="$watt_lyra2v2")
+declare -A intensity_calls=( [x11]="$inten_x11" [x13]="$inten_x13" [x15]="$inten_x15" [nist5]="$inten_nist5" [neoscrypt]="$inten_neoscrypt" [lyra2]="$inten_lyra2" [quark]="$inten_quark" [x14]="$inten_x14" [fresh]="$inten_fresh" [qubit]="$inten_qubit" [keccak]="$inten_keccak" [whirlpoolx]="$inten_whirlpoolx" [skein]="$inten_skein" [groestl]="$inten_groestl" [blake]="$inten_blake" [lyra2v2]="$inten_lyra2v2")
+declare -A gputhreads_calls=( [x11]="$gputhreads_x11" [x13]="$gputhreads_x13" [x15]="$gputhreads_x15" [nist5]="$gputhreads_nist5" [neoscrypt]="$gputhreads_neoscrypt" [lyra2]="$gputhreads_lyra2" [quark]="$gputhreads_quark" [x14]="$gputhreads_x14" [fresh]="$gputhreads_fresh" [qubit]="$gputhreads_qubit" [keccak]="$gputhreads_keccak" [whirlpoolx]="$gputhreads_whirlpoolx" [skein]="$gputhreads_skein" [groestl]="$gputhreads_groestl" [blake]="$gputhreads_blake" [lyra2v2]="$gputhreads_lyra2v2")
+declare -A gfx_calls=( [x11]="$gfx_x11" [x13]="$gfx_x13" [x15]="$gfx_x15" [nist5]="$gfx_nist5" [neoscrypt]="$gfx_neoscrypt" [lyra2]="$gfx_lyra2" [quark]="$gfx_quark" [x14]="$gfx_x14" [fresh]="$gfx_fresh" [qubit]="$gfx_qubit" [keccak]="$gfx_keccak" [whirlpoolx]="$gfx_whirlpoolx" [skein]="$gfx_skein" [groestl]="$gfx_groestl" [blake]="$gfx_blake" [lyra2v2]="$gfx_lyra2v2")
+declare -A mem_calls=( [x11]="$mem_x11" [x13]="$mem_x13" [x15]="$mem_x15" [nist5]="$mem_nist5" [neoscrypt]="$mem_neoscrypt" [lyra2]="$mem_lyra2" [quark]="$mem_quark" [x14]="$mem_x14" [fresh]="$mem_fresh" [qubit]="$mem_qubit" [keccak]="$mem_keccak" [whirlpoolx]="$mem_whirlpoolx" [skein]="$mem_skein" [groestl]="$mem_groestl" [blake]="$mem_blake" [lyra2v2]="$mem_lyra2v2")
 bpi_api_addr="https://api.coindesk.com/v1/bpi/currentprice/$currency.json"
 nicehash_api_addr="https://www.nicehash.com/api?method=stats.global.current"
 ffpool_api_addr="http://ffpool.net/api/status"
 hashpower_api_addr="http://hashpower.co/api/status"
 miner_path="$miner_path/$miner_name"
 
-algo_array=(x11 x13 x15 nist5 neoscrypt lyra2 quark x14 fresh qubit whirlpoolx keccak skein groestl blake)
+algo_array=(x11 x13 x15 nist5 neoscrypt lyra2 quark x14 fresh qubit whirlpoolx keccak skein groestl blake lyra2v2)
 service_calls=(bpi nicehash ffpool hashpower)
-declare -A service_api_calls=( [nicehashx11]="3" [nicehashx13]="4" [nicehashkeccak]="5" [nicehashx15]="6" [nicehashnist5]="7" [nicehashneoscrypt]="8" [nicehashlyra2]="9" [nicehashwhirlpoolx]="10" [nicehashqubit]="11" [nicehashquark]="12" [ffpoolx11]="x11" [ffpoolx13]="x13" [ffpoolx15]="x15" [ffpoolneoscrypt]="neoscrypt" [ffpoollyra2]="lyra2" [ffpoolquark]="quark" [ffpoolx14]="x14" [ffpoolfresh]="fresh" [ffpoolqubit]="qubit" [ffpoolskein]="skein" [ffpoolgroestl]="groestl" [ffpoolblake]="blake" [hashpowerx11]="x11" [hashpowerx13]="x13" [hashpowerx15]="x15" [hashpowerneoscrypt]="neoscrypt" [hashpowerlyra2]="lyra2" [hashpowerquark]="quark" [hashpowerx14]="x14" [hashpowerfresh]="fresh" [hashpowerqubit]="qubit" [hashpowerskein]="skein" [hashpowergroestl]="groestl" [hashpowerblake]="blake")
+declare -A service_api_calls=( [nicehashx11]="3" [nicehashx13]="4" [nicehashkeccak]="5" [nicehashx15]="6" [nicehashnist5]="7" [nicehashneoscrypt]="8" [nicehashlyra2]="9" [nicehashwhirlpoolx]="10" [nicehashqubit]="11" [nicehashquark]="12" [nicehashlyra2v2]="14" [ffpoolx11]="x11" [ffpoolx13]="x13" [ffpoolx15]="x15" [ffpoolneoscrypt]="neoscrypt" [ffpoollyra2]="lyra2" [ffpoolquark]="quark" [ffpoolx14]="x14" [ffpoolfresh]="fresh" [ffpoolqubit]="qubit" [ffpoolskein]="skein" [ffpoolgroestl]="groestl" [ffpoolblake]="blake" [hashpowerx11]="x11" [hashpowerx13]="x13" [hashpowerx15]="x15" [hashpowerneoscrypt]="neoscrypt" [hashpowerlyra2]="lyra2" [hashpowerquark]="quark" [hashpowerx14]="x14" [hashpowerfresh]="fresh" [hashpowerqubit]="qubit" [hashpowerskein]="skein" [hashpowergroestl]="groestl" [hashpowerblake]="blake")
 declare -A service_url=( [nicehash]=$nicehash_url [ffpool]=$ffpool_url [hashpower]=$hashpower_url)
 declare -A service_pay_rate=( [nicehash]=1000000 [ffpool]=1000 [hashpower]=1000)
 declare -A service_port=( [nicehashx11]=3336 [nicehashx13]=3337 [nicehashkeccak]=3338 [nicehashx15]=3339 [nicehashnist5]=3340 [nicehashneoscrypt]=3341 [nicehashlyra2]=3342 [nicehashwhirlpoolx]=3343 [nicehashqubit]=3344 [nicehashquark]=3345 [ffpoolx11]=3533 [ffpoolx13]=3633 [ffpoolx15]=3733 [ffpoolnist5]=3833 [ffpoolx14]=3933 [ffpoolneoscrypt]=4233 [ffpoollyra2]=4433 [ffpoolquark]=4033 [ffpoolfresh]=4133 [ffpoolqubit]=4733 [ffpoolskein]=4933 [ffpoolgroestl]=5033 [ffpoolblake]=4533 [hashpowerx11]=3533 [hashpowerx13]=3633 [hashpowerx15]=3733 [hashpowerneoscrypt]=4233 [hashpowerquark]=4033 [hashpowerqubit]=4733)
@@ -206,6 +210,7 @@ pwd="$ny_pwd"
 algo="$1"
 url="$2"
 if [ "$service" == "nicehash" ] ; then url="stratum+tcp://$algo.$2"; else url="stratum+tcp://$2"; fi
+if [ "$service" == "nicehash" ] && [ "$algo" == "lyra2v2" ]; then url="stratum+tcp://lyra2rev2.$2"; fi
 if [ ! "${intensity_calls[$algo]}" = "0" ] ; then optional_inten="--intensity=${intensity_calls[$algo]}"; else optional_inten=""; fi
 if [ ! "${gputhreads_calls[$algo]}" = "1" ] ; then optional_gpu="-g ${gputhreads_calls[$algo]}"; else optional_gpu=""; fi
 if [ -z ${miner_IP+x} ]; then optional_api="" ; else optional_api="--api-bind $miner_IP:$miner_port"; fi
