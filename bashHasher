@@ -90,7 +90,7 @@ case $i in
     shift
     ;;
     --skiplyra2v2)
-    skip[blake]="1"
+    skip[lyra2v2]="1"
     shift
     ;;
     --debug)
