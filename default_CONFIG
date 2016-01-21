@@ -176,9 +176,6 @@ ny_pwd="x"
 #nicehash_url="hk.nicehash.com:"
 #nicehash_url="jp.nicehash.com:"
 
-#ffpool.net stratum url
-ffpool_url="ffpool.net:"
-
 #hashpower.co stratum url
 hashpower_url="hashpower.co:"
 
