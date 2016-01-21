@@ -21,10 +21,6 @@ case $i in
     skip[nicehash]="1"
     shift
     ;;
-    --skipffpool)
-    skip[ffpool]="1"
-    shift
-    ;;
     --skiphashpower)
     skip[hashpower]="1"
     shift
@@ -113,17 +109,16 @@ declare -A gfx_calls=( [x11]="$gfx_x11" [x13]="$gfx_x13" [x15]="$gfx_x15" [nist5
 declare -A mem_calls=( [x11]="$mem_x11" [x13]="$mem_x13" [x15]="$mem_x15" [nist5]="$mem_nist5" [neoscrypt]="$mem_neoscrypt" [lyra2]="$mem_lyra2" [quark]="$mem_quark" [x14]="$mem_x14" [fresh]="$mem_fresh" [qubit]="$mem_qubit" [keccak]="$mem_keccak" [whirlpoolx]="$mem_whirlpoolx" [skein]="$mem_skein" [groestl]="$mem_groestl" [blake]="$mem_blake" [lyra2v2]="$mem_lyra2v2")
 bpi_api_addr="https://api.coindesk.com/v1/bpi/currentprice/$currency.json"
 nicehash_api_addr="https://www.nicehash.com/api?method=stats.global.current"
-ffpool_api_addr="http://ffpool.net/api/status"
 hashpower_api_addr="http://hashpower.co/api/status"
 miner_path="$miner_path/$miner_name"
 
 algo_array=(x11 x13 x15 nist5 neoscrypt lyra2 quark x14 fresh qubit whirlpoolx keccak skein groestl blake lyra2v2)
-service_calls=(bpi nicehash ffpool hashpower)
-declare -A service_api_calls=( [nicehashx11]="3" [nicehashx13]="4" [nicehashkeccak]="5" [nicehashx15]="6" [nicehashnist5]="7" [nicehashneoscrypt]="8" [nicehashlyra2]="9" [nicehashwhirlpoolx]="10" [nicehashqubit]="11" [nicehashquark]="12" [nicehashlyra2v2]="14" [ffpoolx11]="x11" [ffpoolx13]="x13" [ffpoolx15]="x15" [ffpoolneoscrypt]="neoscrypt" [ffpoollyra2]="lyra2" [ffpoolquark]="quark" [ffpoolx14]="x14" [ffpoolfresh]="fresh" [ffpoolqubit]="qubit" [ffpoolskein]="skein" [ffpoolgroestl]="groestl" [ffpoolblake]="blake" [hashpowerx11]="x11" [hashpowerx13]="x13" [hashpowerx15]="x15" [hashpowerneoscrypt]="neoscrypt" [hashpowerlyra2]="lyra2" [hashpowerquark]="quark" [hashpowerx14]="x14" [hashpowerfresh]="fresh" [hashpowerqubit]="qubit" [hashpowerskein]="skein" [hashpowergroestl]="groestl" [hashpowerblake]="blake")
-declare -A service_url=( [nicehash]=$nicehash_url [ffpool]=$ffpool_url [hashpower]=$hashpower_url)
-declare -A service_pay_rate=( [nicehash]=1000000 [ffpool]=1000 [hashpower]=1000)
-declare -A service_port=( [nicehashx11]=3336 [nicehashx13]=3337 [nicehashkeccak]=3338 [nicehashx15]=3339 [nicehashnist5]=3340 [nicehashneoscrypt]=3341 [nicehashlyra2]=3342 [nicehashwhirlpoolx]=3343 [nicehashqubit]=3344 [nicehashquark]=3345 [ffpoolx11]=3533 [ffpoolx13]=3633 [ffpoolx15]=3733 [ffpoolnist5]=3833 [ffpoolx14]=3933 [ffpoolneoscrypt]=4233 [ffpoollyra2]=4433 [ffpoolquark]=4033 [ffpoolfresh]=4133 [ffpoolqubit]=4733 [ffpoolskein]=4933 [ffpoolgroestl]=5033 [ffpoolblake]=4533 [hashpowerx11]=3533 [hashpowerx13]=3633 [hashpowerx15]=3733 [hashpowerneoscrypt]=4233 [hashpowerquark]=4033 [hashpowerqubit]=4733)
-declare -A service_api_addr=( [bpi]=$bpi_api_addr [nicehash]=$nicehash_api_addr [ffpool]=$ffpool_api_addr [hashpower]=$hashpower_api_addr )
+service_calls=(bpi nicehash hashpower)
+declare -A service_api_calls=( [nicehashx11]="3" [nicehashx13]="4" [nicehashkeccak]="5" [nicehashx15]="6" [nicehashnist5]="7" [nicehashneoscrypt]="8" [nicehashlyra2]="9" [nicehashwhirlpoolx]="10" [nicehashqubit]="11" [nicehashquark]="12" [nicehashlyra2v2]="14" [hashpowerx11]="x11" [hashpowerx13]="x13" [hashpowerx15]="x15" [hashpowerneoscrypt]="neoscrypt" [hashpowerlyra2]="lyra2" [hashpowerquark]="quark" [hashpowerx14]="x14" [hashpowerfresh]="fresh" [hashpowerqubit]="qubit" [hashpowerskein]="skein" [hashpowergroestl]="groestl" [hashpowerblake]="blake")
+declare -A service_url=( [nicehash]=$nicehash_url [hashpower]=$hashpower_url)
+declare -A service_pay_rate=( [nicehash]=1000000 [hashpower]=1000)
+declare -A service_port=( [nicehashx11]=3336 [nicehashx13]=3337 [nicehashkeccak]=3338 [nicehashx15]=3339 [nicehashnist5]=3340 [nicehashneoscrypt]=3341 [nicehashlyra2]=3342 [nicehashwhirlpoolx]=3343 [nicehashqubit]=3344 [nicehashquark]=3345 [hashpowerx11]=3533 [hashpowerx13]=3633 [hashpowerx15]=3733 [hashpowerneoscrypt]=4233 [hashpowerquark]=4033 [hashpowerqubit]=4733)
+declare -A service_api_addr=( [bpi]=$bpi_api_addr [nicehash]=$nicehash_api_addr [hashpower]=$hashpower_api_addr )
 declare -A service_api_fetched
 service_api_len=${#service_api_addr[@]}
 algo_len=${#algo_array[@]}
@@ -205,7 +200,7 @@ if [ ! -z "${find_pid}" ] ; then kill -9 $find_pid ; fi
 service="$3"
 IFS=, read -a mining_sum <<< "${mining_addr}"
 unset IFS
-if [[ ${#mining_sum[@]} -gt 1  && ( "$service" == "ffpool" || "$service" == "hashpower") ]] ; then user=${mining_sum[1]} ; else user=${mining_sum[0]}; fi
+if [[ ${#mining_sum[@]} -gt 1  && ("$service" == "hashpower") ]] ; then user=${mining_sum[1]} ; else user=${mining_sum[0]}; fi
 pwd="$ny_pwd"
 algo="$1"
 url="$2"
@@ -255,7 +250,6 @@ btc_rate=$($script_path/JSON.sh/JSON.sh -x '\"bpi\",\"USD\",\"rate_float\"' -var
 btc_rate_clean=${btc_rate/,}
 fi
 if [ ! -z "${logging+1}" ] ; then echo "$log_time NiceHash Fetch: ${service_api_fetched[nicehash]}" >> $script_path/log ; fi
-if [ ! -z "${logging+1}" ] ; then echo "$log_time ffpool Fetch: ${service_api_fetched[ffpool]}" >> $script_path/log ; fi
 if [ ! -z "${logging+1}" ] ; then echo "$log_time hashpower Fetch: ${service_api_fetched[hashpower]}" >> $script_path/log ; fi
 
 compute_return () {
@@ -273,7 +267,7 @@ net="0"
 echo "$net"
 continue
 fi
-elif [ "$service_test" == "ffpool" ] || [ "$service_test" == "hashpower" ]
+elif [ "$service_test" == "hashpower" ]
 then
 coin_test=$($script_path/JSON.sh/JSON.sh -x "\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"coins\"" -var <<< "${service_api_fetched[${service_test}]}")
 if [ -z "$coin_test" ]
