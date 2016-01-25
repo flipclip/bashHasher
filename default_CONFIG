@@ -176,9 +176,12 @@ ny_pwd="x"
 #nicehash_url="hk.nicehash.com:"
 #nicehash_url="jp.nicehash.com:"
 
+#zpool.ca stratum url
+zpool_url="mine.zpool.ca:"
+
 #hashpower.co stratum url
 hashpower_url="hashpower.co:"
 
 #CONFIG version
 #DO NOT CHANGE
-config_ver="1.1"
+config_ver="1.2"
