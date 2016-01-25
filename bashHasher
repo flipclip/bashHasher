@@ -21,6 +21,10 @@ case $i in
     skip[nicehash]="1"
     shift
     ;;
+    --skipzpool)
+    skip[zpool]="1"
+    shift
+    ;;
     --skiphashpower)
     skip[hashpower]="1"
     shift
@@ -109,16 +113,17 @@ declare -A gfx_calls=( [x11]="$gfx_x11" [x13]="$gfx_x13" [x15]="$gfx_x15" [nist5
 declare -A mem_calls=( [x11]="$mem_x11" [x13]="$mem_x13" [x15]="$mem_x15" [nist5]="$mem_nist5" [neoscrypt]="$mem_neoscrypt" [lyra2]="$mem_lyra2" [quark]="$mem_quark" [x14]="$mem_x14" [fresh]="$mem_fresh" [qubit]="$mem_qubit" [keccak]="$mem_keccak" [whirlpoolx]="$mem_whirlpoolx" [skein]="$mem_skein" [groestl]="$mem_groestl" [blake]="$mem_blake" [lyra2v2]="$mem_lyra2v2")
 bpi_api_addr="https://api.coindesk.com/v1/bpi/currentprice/$currency.json"
 nicehash_api_addr="https://www.nicehash.com/api?method=stats.global.current"
+zpool_api_addr="http://www.zpool.ca/api/status"
 hashpower_api_addr="http://hashpower.co/api/status"
 miner_path="$miner_path/$miner_name"
 
 algo_array=(x11 x13 x15 nist5 neoscrypt lyra2 quark x14 fresh qubit whirlpoolx keccak skein groestl blake lyra2v2)
-service_calls=(bpi nicehash hashpower)
-declare -A service_api_calls=( [nicehashx11]="3" [nicehashx13]="4" [nicehashkeccak]="5" [nicehashx15]="6" [nicehashnist5]="7" [nicehashneoscrypt]="8" [nicehashlyra2]="9" [nicehashwhirlpoolx]="10" [nicehashqubit]="11" [nicehashquark]="12" [nicehashlyra2v2]="14" [hashpowerx11]="x11" [hashpowerx13]="x13" [hashpowerx15]="x15" [hashpowerneoscrypt]="neoscrypt" [hashpowerlyra2]="lyra2" [hashpowerquark]="quark" [hashpowerx14]="x14" [hashpowerfresh]="fresh" [hashpowerqubit]="qubit" [hashpowerskein]="skein" [hashpowergroestl]="groestl" [hashpowerblake]="blake")
-declare -A service_url=( [nicehash]=$nicehash_url [hashpower]=$hashpower_url)
-declare -A service_pay_rate=( [nicehash]=1000000 [hashpower]=1000)
-declare -A service_port=( [nicehashx11]=3336 [nicehashx13]=3337 [nicehashkeccak]=3338 [nicehashx15]=3339 [nicehashnist5]=3340 [nicehashneoscrypt]=3341 [nicehashlyra2]=3342 [nicehashwhirlpoolx]=3343 [nicehashqubit]=3344 [nicehashquark]=3345 [hashpowerx11]=3533 [hashpowerx13]=3633 [hashpowerx15]=3733 [hashpowerneoscrypt]=4233 [hashpowerquark]=4033 [hashpowerqubit]=4733)
-declare -A service_api_addr=( [bpi]=$bpi_api_addr [nicehash]=$nicehash_api_addr [hashpower]=$hashpower_api_addr )
+service_calls=(bpi nicehash zpool hashpower)
+declare -A service_api_calls=( [nicehashx11]="3" [nicehashx13]="4" [nicehashkeccak]="5" [nicehashx15]="6" [nicehashnist5]="7" [nicehashneoscrypt]="8" [nicehashlyra2]="9" [nicehashwhirlpoolx]="10" [nicehashqubit]="11" [nicehashquark]="12" [nicehashlyra2v2]="14" [zpoolx11]="x11" [zpoolx13]="x13" [zpoolx15]="x15" [zpoolneoscrypt]="neoscrypt" [zpoollyra2v2]="lyra2v2" [zpoolquark]="quark" [zpoolqubit]="qubit" [zpoolgroestl]="groestl" [zpoolblake]="blake" [hashpowerx11]="x11" [hashpowerx13]="x13" [hashpowerx15]="x15" [hashpowerneoscrypt]="neoscrypt" [hashpowerlyra2]="lyra2" [hashpowerquark]="quark" [hashpowerx14]="x14" [hashpowerfresh]="fresh" [hashpowerqubit]="qubit" [hashpowerskein]="skein" [hashpowergroestl]="groestl" [hashpowerblake]="blake")
+declare -A service_url=( [nicehash]=$nicehash_url [zpool]=$zpool_url [hashpower]=$hashpower_url)
+declare -A service_pay_rate=( [nicehash]=1000000 [zpool]=1000 [hashpower]=1000)
+declare -A service_port=( [nicehashx11]=3336 [nicehashx13]=3337 [nicehashkeccak]=3338 [nicehashx15]=3339 [nicehashnist5]=3340 [nicehashneoscrypt]=3341 [nicehashlyra2]=3342 [nicehashwhirlpoolx]=3343 [nicehashqubit]=3344 [nicehashquark]=3345 [nicehashlyra2v2]=3347 [zpoolx11]=3533 [zpoolx13]=3633 [zpoolx15]=3733 [zpoolneoscrypt]=4233 [zpoollyra2v2]=4533 [zpoolquark]=4033 [zpoolqubit]=4733 [zpoolgroestl]=5333 [zpoolblake]=5733 [hashpowerx11]=3533 [hashpowerx13]=3633 [hashpowerx15]=3733 [hashpowerneoscrypt]=4233 [hashpowerquark]=4033 [hashpowerqubit]=4733)
+declare -A service_api_addr=( [bpi]=$bpi_api_addr [nicehash]=$nicehash_api_addr [zpool]=$zpool_api_addr [hashpower]=$hashpower_api_addr )
 declare -A service_api_fetched
 service_api_len=${#service_api_addr[@]}
 algo_len=${#algo_array[@]}
