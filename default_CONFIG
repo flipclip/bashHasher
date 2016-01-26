@@ -60,6 +60,7 @@ hash_skein=""
 hash_groestl=""
 hash_blake=""
 hash_lyra2v2=""
+hash_c11=""
 
 #intensity (-i parameter) setting per algo (default: 0 , use ccminer defaults)
 #decimals allowed
@@ -79,6 +80,7 @@ inten_skein="0"
 inten_groestl="0"
 inten_blake="0"
 inten_lyra2v2="0"
+inten_c11="0"
 
 #number of gputhreads (-g parameter) per algo (default: 1)
 gputhreads_x11="1"
@@ -97,6 +99,7 @@ gputhreads_skein="1"
 gputhreads_groestl="1"
 gputhreads_blake="1"
 gputhreads_lyra2v2="1"
+gputhreads_c11="1"
 
 #your energy usage per algorithm
 watt_x11="0"
@@ -115,6 +118,7 @@ watt_skein="0"
 watt_groestl="0"
 watt_blake="0"
 watt_lyra2v2="0"
+watt_c11="0"
 
 #overclock gpu graphics clock via nvidia-settings
 #amount in MHz to over-/under-clock the graphics clock
@@ -136,6 +140,7 @@ gfx_skein="0"
 gfx_groestl="0"
 gfx_blake="0"
 gfx_lyra2v2="0"
+gfx_c11="0"
 
 #overclock gpu memory transfer via nvidia-settings
 #amount in MHz to over-/under-clock the memory transfer rate
@@ -157,6 +162,7 @@ mem_skein="0"
 mem_groestl="0"
 mem_blake="0"
 mem_lyra2v2="0"
+mem_c11="0"
 
 #your energy cost per kilowatt-hour (kWh) (example, for twelve cents: .12)
 kWh_cost="0"
@@ -184,4 +190,4 @@ hashpower_url="hashpower.co:"
 
 #CONFIG version
 #DO NOT CHANGE
-config_ver="1.2"
+config_ver="1.3"
