@@ -272,7 +272,7 @@ pay="${pay_temp#\"}"
 if [ -z "$pay" ]
 then
 if [ ! -z "${logging+1}" ] ; then echo "$log_time NiceHash does not use algo ${algo_array[$i]}." >> $script_path/log ; fi
-net="0"
+net="-"
 echo "$net"
 continue
 fi
@@ -282,13 +282,13 @@ coin_test=$($script_path/JSON.sh/JSON.sh -x "\"${service_api_calls[$service_test
 if [ -z "$coin_test" ]
 then
 if [ ! -z "${logging+1}" ] ; then echo "$log_time $service_test does not use algo ${algo_array[$i]}." >> $script_path/log ; fi
-net="0"
+net="-"
 echo "$net"
 continue
 elif [ "$coin_test" -eq "0" ]
 then
 if [ ! -z "${logging+1}" ] ; then echo "$log_time $service_test has zero coins using ${algo_array[$i]}. Skipping." >> $script_path/log ; fi
-net="0"
+net="-"
 echo "$net"
 continue
 else
@@ -324,9 +324,12 @@ fi
 mining_return=$(compute_return "$service_test" "$i")
 if [ ! -z "${logging+1}" ]
 then 
-if [ "$mining_return" != "0" ] ; then echo "$log_time $service_test : ${algo_array[$i]} : Future Pay (net) = $mining_return"  >> $script_path/log ; fi
+if [ "$mining_return" != "-" ] ; then echo "$log_time $service_test : ${algo_array[$i]} : Future Pay (net) = $mining_return"  >> $script_path/log ; fi
 fi
+if [ "$mining_return" != "-" ]
+then
 if (( $(bc <<< "$mining_return > $largest") == 1 )) ; then largest=$mining_return ; port_use=${service_port[$service_test${algo_array[$i]}]} ; algo_use=${algo_array[$i]} ; service_use="$service_test" ; url=${service_url[$service_test]} ; fi
+fi
 #end price comparison loop
 done
 
