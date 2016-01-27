@@ -45,10 +45,6 @@ case $i in
     skip[nist5]="1"
     shift
     ;;
-    --skipx14)
-    skip[x14]="1"
-    shift
-    ;;
     --skipneoscrypt)
     skip[neoscrypt]="1"
     shift
@@ -61,10 +57,6 @@ case $i in
     skip[quark]="1"
     shift
     ;;
-    --skipfresh)
-    skip[fresh]="1"
-    shift
-    ;;
     --skipqubit)
     skip[qubit]="1"
     shift
@@ -75,10 +67,6 @@ case $i in
     ;;
     --skipwhirlpoolx)
     skip[whirlpoolx]="1"
-    shift
-    ;;
-    --skipskein)
-    skip[skein]="1"
     shift
     ;;
     --skipgroestl)
@@ -109,12 +97,12 @@ done
 
 log_time=$(date +"%m-%d-%y %T")
 largest=-10000
-declare -A hash_calls=( [x11]="$hash_x11" [x13]="$hash_x13" [x15]="$hash_x15" [nist5]="$hash_nist5" [neoscrypt]="$hash_neoscrypt" [lyra2]="$hash_lyra2" [quark]="$hash_quark" [x14]="$hash_x14" [fresh]="$hash_fresh" [qubit]="$hash_qubit" [keccak]="$hash_keccak" [whirlpoolx]="$hash_whirlpoolx" [skein]="$hash_skein" [groestl]="$hash_groestl" [blake]="$hash_blake" [lyra2v2]="$hash_lyra2v2" [c11]="$hash_c11")
-declare -A watt_calls=( [x11]="$watt_x11" [x13]="$watt_x13" [x15]="$watt_x15" [nist5]="$watt_nist5" [neoscrypt]="$watt_neoscrypt" [lyra2]="$watt_lyra2" [quark]="$watt_quark" [x14]="$watt_x14" [fresh]="$watt_fresh" [qubit]="$watt_qubit" [keccak]="$watt_keccak" [whirlpoolx]="$watt_whirlpoolx"  [skein]="$watt_skein" [groestl]="$watt_groestl" [blake]="$watt_blake" [lyra2v2]="$watt_lyra2v2" [c11]="$watt_c11")
-declare -A intensity_calls=( [x11]="$inten_x11" [x13]="$inten_x13" [x15]="$inten_x15" [nist5]="$inten_nist5" [neoscrypt]="$inten_neoscrypt" [lyra2]="$inten_lyra2" [quark]="$inten_quark" [x14]="$inten_x14" [fresh]="$inten_fresh" [qubit]="$inten_qubit" [keccak]="$inten_keccak" [whirlpoolx]="$inten_whirlpoolx" [skein]="$inten_skein" [groestl]="$inten_groestl" [blake]="$inten_blake" [lyra2v2]="$inten_lyra2v2" [c11]="$inten_c11")
-declare -A gputhreads_calls=( [x11]="$gputhreads_x11" [x13]="$gputhreads_x13" [x15]="$gputhreads_x15" [nist5]="$gputhreads_nist5" [neoscrypt]="$gputhreads_neoscrypt" [lyra2]="$gputhreads_lyra2" [quark]="$gputhreads_quark" [x14]="$gputhreads_x14" [fresh]="$gputhreads_fresh" [qubit]="$gputhreads_qubit" [keccak]="$gputhreads_keccak" [whirlpoolx]="$gputhreads_whirlpoolx" [skein]="$gputhreads_skein" [groestl]="$gputhreads_groestl" [blake]="$gputhreads_blake" [lyra2v2]="$gputhreads_lyra2v2" [c11]="$gputhreads_c11")
-declare -A gfx_calls=( [x11]="$gfx_x11" [x13]="$gfx_x13" [x15]="$gfx_x15" [nist5]="$gfx_nist5" [neoscrypt]="$gfx_neoscrypt" [lyra2]="$gfx_lyra2" [quark]="$gfx_quark" [x14]="$gfx_x14" [fresh]="$gfx_fresh" [qubit]="$gfx_qubit" [keccak]="$gfx_keccak" [whirlpoolx]="$gfx_whirlpoolx" [skein]="$gfx_skein" [groestl]="$gfx_groestl" [blake]="$gfx_blake" [lyra2v2]="$gfx_lyra2v2" [c11]="$gfx_c11")
-declare -A mem_calls=( [x11]="$mem_x11" [x13]="$mem_x13" [x15]="$mem_x15" [nist5]="$mem_nist5" [neoscrypt]="$mem_neoscrypt" [lyra2]="$mem_lyra2" [quark]="$mem_quark" [x14]="$mem_x14" [fresh]="$mem_fresh" [qubit]="$mem_qubit" [keccak]="$mem_keccak" [whirlpoolx]="$mem_whirlpoolx" [skein]="$mem_skein" [groestl]="$mem_groestl" [blake]="$mem_blake" [lyra2v2]="$mem_lyra2v2" [c11]="$mem_c11")
+declare -A hash_calls=( [x11]="$hash_x11" [x13]="$hash_x13" [x15]="$hash_x15" [nist5]="$hash_nist5" [neoscrypt]="$hash_neoscrypt" [lyra2]="$hash_lyra2" [quark]="$hash_quark" [qubit]="$hash_qubit" [keccak]="$hash_keccak" [whirlpoolx]="$hash_whirlpoolx" [groestl]="$hash_groestl" [blake]="$hash_blake" [lyra2v2]="$hash_lyra2v2" [c11]="$hash_c11")
+declare -A watt_calls=( [x11]="$watt_x11" [x13]="$watt_x13" [x15]="$watt_x15" [nist5]="$watt_nist5" [neoscrypt]="$watt_neoscrypt" [lyra2]="$watt_lyra2" [quark]="$watt_quark" [qubit]="$watt_qubit" [keccak]="$watt_keccak" [whirlpoolx]="$watt_whirlpoolx" [groestl]="$watt_groestl" [blake]="$watt_blake" [lyra2v2]="$watt_lyra2v2" [c11]="$watt_c11")
+declare -A intensity_calls=( [x11]="$inten_x11" [x13]="$inten_x13" [x15]="$inten_x15" [nist5]="$inten_nist5" [neoscrypt]="$inten_neoscrypt" [lyra2]="$inten_lyra2" [quark]="$inten_quark" [qubit]="$inten_qubit" [keccak]="$inten_keccak" [whirlpoolx]="$inten_whirlpoolx" [groestl]="$inten_groestl" [blake]="$inten_blake" [lyra2v2]="$inten_lyra2v2" [c11]="$inten_c11")
+declare -A gputhreads_calls=( [x11]="$gputhreads_x11" [x13]="$gputhreads_x13" [x15]="$gputhreads_x15" [nist5]="$gputhreads_nist5" [neoscrypt]="$gputhreads_neoscrypt" [lyra2]="$gputhreads_lyra2" [quark]="$gputhreads_quark" [qubit]="$gputhreads_qubit" [keccak]="$gputhreads_keccak" [whirlpoolx]="$gputhreads_whirlpoolx" [groestl]="$gputhreads_groestl" [blake]="$gputhreads_blake" [lyra2v2]="$gputhreads_lyra2v2" [c11]="$gputhreads_c11")
+declare -A gfx_calls=( [x11]="$gfx_x11" [x13]="$gfx_x13" [x15]="$gfx_x15" [nist5]="$gfx_nist5" [neoscrypt]="$gfx_neoscrypt" [lyra2]="$gfx_lyra2" [quark]="$gfx_quark" [qubit]="$gfx_qubit" [keccak]="$gfx_keccak" [whirlpoolx]="$gfx_whirlpoolx" [groestl]="$gfx_groestl" [blake]="$gfx_blake" [lyra2v2]="$gfx_lyra2v2" [c11]="$gfx_c11")
+declare -A mem_calls=( [x11]="$mem_x11" [x13]="$mem_x13" [x15]="$mem_x15" [nist5]="$mem_nist5" [neoscrypt]="$mem_neoscrypt" [lyra2]="$mem_lyra2" [quark]="$mem_quark" [qubit]="$mem_qubit" [keccak]="$mem_keccak" [whirlpoolx]="$mem_whirlpoolx" [groestl]="$mem_groestl" [blake]="$mem_blake" [lyra2v2]="$mem_lyra2v2" [c11]="$mem_c11")
 bpi_api_addr="https://api.coindesk.com/v1/bpi/currentprice/$currency.json"
 nicehash_api_addr="https://www.nicehash.com/api?method=stats.global.current"
 zpool_api_addr="http://www.zpool.ca/api/status"
