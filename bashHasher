@@ -143,6 +143,23 @@ cc_sum_val=$(( cc_sum_val + 2 ))
 done
 }
 
+compute_cost () {
+i="$1"
+computed_cost=$(bc <<< "scale=9;${watt_calls[${algo_array[$i]}]}/1000*$kWh_cost*24")
+echo "$computed_cost"
+}
+
+for (( i=0 ; i < ${algo_len} ; i++ ));
+do
+if test "${skip[${algo_array[$i]}]+1}"
+then
+if [ ! -z "${logging+1}" ] ; then echo "$log_time Power cost for algo ${algo_array[$i]} skipped." >> $script_path/log ; fi
+continue
+fi
+mining_cost=$(compute_cost "$i")
+power_cost[${i}]=${mining_cost}
+done
+
 find_pid=$(pidof $miner_name)
 if [[ $? -eq 1 ]]
 then
@@ -287,8 +304,7 @@ fi
 fi
 gross=$(bc <<< "scale=9;$pay/${service_pay_rate[$service_test]}*${hash_calls[${algo_array[$i]}]}")
 if [ ! -z "${logging+1}" ] ; then echo "$log_time $service_test : ${algo_array[$i]} : Future Pay (gross) = $gross"  >> $script_path/log ; fi
-mining_cost=$(bc <<< "scale=9;${watt_calls[${algo_array[$i]}]}/1000*$kWh_cost*24")
-btc_need=$(bc <<< "scale=9;$mining_cost/$btc_rate_clean")
+btc_need=$(bc <<< "scale=9;${power_cost[${i}]}/$btc_rate_clean")
 net=$(bc <<< "scale=9;$gross-$btc_need")
 echo "$net"
 }
