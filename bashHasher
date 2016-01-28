@@ -247,6 +247,7 @@ btc_rate=$($script_path/JSON.sh/JSON.sh -x '\"bpi\",\"USD\",\"rate_float\"' -var
 btc_rate_clean=${btc_rate/,}
 fi
 if [ ! -z "${logging+1}" ] ; then echo "$log_time NiceHash Fetch: ${service_api_fetched[nicehash]}" >> $script_path/log ; fi
+if [ ! -z "${logging+1}" ] ; then echo "$log_time Zpool Fetch: ${service_api_fetched[zpool]}" >> $script_path/log ; fi
 if [ ! -z "${logging+1}" ] ; then echo "$log_time hashpower Fetch: ${service_api_fetched[hashpower]}" >> $script_path/log ; fi
 
 compute_return () {
