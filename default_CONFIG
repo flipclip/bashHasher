@@ -3,8 +3,8 @@ currency=""
 
 #mining address to send to.
 #two addresses allowed.  seperate with comma.  if single address, both services send to that address.
-#if two addresses, first address is for nicehash, second address yaamp.
-#help keep track of returns from each service or Yaamp allows payout in "any currency we mine"
+#if two addresses, first address is for nicehash, second address yaamp clones (hashpower, zpool).
+#help keep track of returns from each service or Yaamp clones allow payouts in "any currency we mine"
 #Example: user could use btc with nicehash but dash with yaamp
 #mining_addr="x,y"
 mining_addr=""
