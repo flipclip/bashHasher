@@ -76,7 +76,6 @@ largest=-10000
 declare -A hash_calls=( [x11]="$hash_x11" [x13]="$hash_x13" [x15]="$hash_x15" [neoscrypt]="$hash_neoscrypt" [quark]="$hash_quark" [qubit]="$hash_qubit" [keccak]="$hash_keccak" [lyra2v2]="$hash_lyra2v2")
 declare -A watt_calls=( [x11]="$watt_x11" [x13]="$watt_x13" [x15]="$watt_x15" [neoscrypt]="$watt_neoscrypt" [quark]="$watt_quark" [qubit]="$watt_qubit" [keccak]="$watt_keccak" [lyra2v2]="$watt_lyra2v2")
 declare -A intensity_calls=( [x11]="$inten_x11" [x13]="$inten_x13" [x15]="$inten_x15" [neoscrypt]="$inten_neoscrypt" [quark]="$inten_quark" [qubit]="$inten_qubit" [keccak]="$inten_keccak" [lyra2v2]="$inten_lyra2v2")
-declare -A gputhreads_calls=( [x11]="$gputhreads_x11" [x13]="$gputhreads_x13" [x15]="$gputhreads_x15" [nist5]="$gputhreads_nist5" [neoscrypt]="$gputhreads_neoscrypt" [lyra2]="$gputhreads_lyra2" [quark]="$gputhreads_quark" [qubit]="$gputhreads_qubit" [keccak]="$gputhreads_keccak" [whirlpoolx]="$gputhreads_whirlpoolx" [groestl]="$gputhreads_groestl" [blake]="$gputhreads_blake" [lyra2v2]="$gputhreads_lyra2v2" [c11]="$gputhreads_c11")
 declare -A gfx_calls=( [x11]="$gfx_x11" [x13]="$gfx_x13" [x15]="$gfx_x15" [neoscrypt]="$gfx_neoscrypt" [quark]="$gfx_quark" [qubit]="$gfx_qubit" [keccak]="$gfx_keccak" [lyra2v2]="$gfx_lyra2v2")
 declare -A mem_calls=( [x11]="$mem_x11" [x13]="$mem_x13" [x15]="$mem_x15" [neoscrypt]="$mem_neoscrypt" [quark]="$mem_quark" [qubit]="$mem_qubit" [keccak]="$mem_keccak" [lyra2v2]="$mem_lyra2v2")
 bpi_api_addr="https://api.coindesk.com/v1/bpi/currentprice/$currency.json"
@@ -197,7 +196,6 @@ url="$2"
 if [ "$service" == "nicehash" ] ; then url="stratum+tcp://$algo.$2"; else url="stratum+tcp://$2"; fi
 if [ "$service" == "nicehash" ] && [ "$algo" == "lyra2v2" ]; then url="stratum+tcp://lyra2rev2.$2"; fi
 if [ ! "${intensity_calls[$algo]}" = "0" ] ; then optional_inten="--intensity=${intensity_calls[$algo]}"; else optional_inten=""; fi
-if [ ! "${gputhreads_calls[$algo]}" = "1" ] ; then optional_gpu="-g ${gputhreads_calls[$algo]}"; else optional_gpu=""; fi
 if [ -z ${miner_IP+x} ]; then optional_api="" ; else optional_api="--api-bind $miner_IP:$miner_port"; fi
 if [ -z ${other_cmd+x} ]; then optional_cmd="" ; else optional_cmd="$other_cmd"; fi
 if [ -n "$nv_path" ]; then overclock "$algo" ; fi
