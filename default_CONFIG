@@ -52,6 +52,7 @@ hash_quark=""
 hash_qubit=""
 hash_keccak=""
 hash_lyra2v2=""
+hash_decred=""
 
 #intensity (-i parameter) setting per algo (default: 0 , use ccminer defaults)
 #decimals allowed
@@ -63,6 +64,7 @@ inten_quark="0"
 inten_qubit="0"
 inten_keccak="0"
 inten_lyra2v2="0"
+inten_decred="0"
 
 #your energy usage per algorithm
 watt_x11="0"
@@ -73,6 +75,7 @@ watt_quark="0"
 watt_qubit="0"
 watt_keccak="0"
 watt_lyra2v2="0"
+watt_decred="0"
 
 #overclock gpu graphics clock via nvidia-settings
 #amount in MHz to over-/under-clock the graphics clock
@@ -86,6 +89,7 @@ gfx_quark="0"
 gfx_qubit="0"
 gfx_keccak="0"
 gfx_lyra2v2="0"
+gfx_decred="0"
 
 #overclock gpu memory transfer via nvidia-settings
 #amount in MHz to over-/under-clock the memory transfer rate
@@ -99,6 +103,7 @@ mem_quark="0"
 mem_qubit="0"
 mem_keccak="0"
 mem_lyra2v2="0"
+mem_decred="0"
 
 #your energy cost per kilowatt-hour (kWh) (example, for twelve cents: .12)
 kWh_cost="0"
@@ -126,4 +131,4 @@ hashpower_url="hashpower.co:"
 
 #CONFIG version
 #DO NOT CHANGE
-config_ver="1.4"
+config_ver="1.5"
