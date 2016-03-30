@@ -126,6 +126,17 @@ cc_sum_val=$(( cc_sum_val + 2 ))
 done
 }
 
+shorten_pool_url () {
+full_url="$1"
+shorter=${full_url:14}
+shorten=`expr index "$shorter" :`
+(( shorten = shorten - 1 ))
+shorten_service="${shorter:0:$shorten}"
+shorten_service="${shorten_service%.*}"
+shorten_service="${shorten_service##*.}"
+echo "$shorten_service"
+}
+
 compute_cost () {
 i="$1"
 computed_cost=$(bc <<< "scale=9;${watt_calls[${algo_array[$i]}]}/1000*$kWh_cost*24")
@@ -161,12 +172,7 @@ rejected=${assoc_sum[REJ]}
 telnet_pool="$({ echo 'pool'; sleep .5; } | telnet $miner_IP $miner_port 2>1 )"
 read_api "$telnet_pool"
 service_url=${assoc_sum[URL]}
-shorter=${service_url:14}
-shorten=`expr index "$shorter" :`
-(( shorten = shorten - 1 ))
-service_in_use="${shorter:0:$shorten}"
-service_in_use="${service_in_use%.*}"
-service_in_use="${service_in_use##*.}"
+service_in_use=$(shorten_pool_url "$service_url")
 if [ "$service_in_use" == "westhash" ] ; then service_in_use="nicehash" ; fi
 if [ ! -z "${logging+1}" ] ; then echo "$log_time Algo in Use via API: $algo_in_use" >> $script_path/log ; fi
 if [ ! -z "${logging+1}" ] ; then echo "$log_time Hash in Use via API: $hash_in_use" >> $script_path/log ; fi
@@ -179,21 +185,6 @@ algo_in_use=${using_array[1]}
 if [ ! -z "${logging+1}" ] ; then echo "$log_time Service in Use via Using File: $service_in_use" >> $script_path/log ; fi
 if [ ! -z "${logging+1}" ] ; then echo "$log_time Algo in Use via Using File: $algo_in_use" >> $script_path/log ; fi
 fi
-
-overclock () {
-IFS=, read -a gfx_sum <<< "${gfx_calls[$1]}"
-unset IFS
-for (( gfx_i=0 ; gfx_i < ${#gfx_sum[@]} ; gfx_i++ ));
-do
-$nv_path/nvidia-settings -a "[gpu:$gfx_i]/gpugraphicsclockoffset[1]=${gfx_sum[$gfx_i]}"
-done
-IFS=, read -a mem_sum <<< "${mem_calls[$1]}"
-unset IFS
-for (( mem_i=0 ; mem_i < ${#mem_sum[@]} ; mem_i++ ));
-do
-$nv_path/nvidia-settings -a "[gpu:$mem_i]/gpumemorytransferrateoffset[1]=${mem_sum[$mem_i]}"
-done
-}
 
 miner_kill () {
 if [ ! -z "${find_pid}" ] ; then kill -9 $find_pid ; fi
