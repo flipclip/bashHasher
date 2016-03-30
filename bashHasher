@@ -4,7 +4,7 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 . $DIR/CONFIG
 
-config_test="1.5"
+config_test="1.6"
 if [ "$config_ver" != "$config_test" ]
 then
 echo "CONFIG file version: $config_ver bashHasher is looking for $config_test.  Please update accordingly. Exiting"
@@ -67,6 +67,10 @@ case $i in
     ;;
     --debug)
     logging="1"
+    shift
+    ;;
+    --json)
+    json_output="y"
     shift
     ;;
     *)
@@ -151,6 +155,9 @@ telnet_sum="$({ echo 'summary'; sleep .5; } | telnet $miner_IP $miner_port 2>1 )
 read_api "$telnet_sum"
 algo_in_use=${assoc_sum[ALGO]}
 hash_in_use=${assoc_sum[KHS]}
+diff_in_use=${assoc_sum[DIFF]}
+accepted=${assoc_sum[ACC]}
+rejected=${assoc_sum[REJ]}
 telnet_pool="$({ echo 'pool'; sleep .5; } | telnet $miner_IP $miner_port 2>1 )"
 read_api "$telnet_pool"
 service_url=${assoc_sum[URL]}
@@ -372,4 +379,15 @@ if [ ! -z "${logging+1}" ] ; then echo "$log_time $miner_name not running. Start
 miner_kill "$algo_use" "$url$port_use" "$service_use"
 fi
 echo "$service_use:$algo_use:$(date +%s)" > $script_path/using
+if [ ! -z "${json_output+1}" ]
+then
+json_time=$(date +%s)
+if [ ! -z "${miner_IP+1}" ]
+then
+echo "{\"mining\":[{\"Time\":\"$json_time\",\"Service\":\"$service_in_use\",\"Algo\":\"$algo_in_use\",\"Current Mining Return\":\"$current_mining_return\",\"Hash Rate\":\"$hash_in_use\",\"Diff\":\"$diff_in_use\",\"Accepted\":\"$accepted\",\"Rejected\":\"$rejected\"}]}" >> $script_path/json 
+else
+echo "{\"mining\":[{\"Time\":\"$json_time\",\"Service\":\"$service_in_use\",\"Algo\":\"$algo_in_use\",\"Current Mining Return\":\"$current_mining_return\",\"Hash Rate\":\"-\",\"Diff\":\"-\",\"Accepted\":\"-\",\"Rejected\":\"-\"}]}" >> $script_path/json 
+fi
+fi
 if [ ! -z "${logging+1}" ] ; then echo "$log_time $service_use:$algo_use:$port_use:$largest" >> $script_path/log ; fi
+
