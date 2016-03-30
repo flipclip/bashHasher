@@ -129,6 +129,9 @@ zpool_url="mine.zpool.ca:"
 #hashpower.co stratum url
 hashpower_url="hashpower.co:"
 
+#Output json data
+json_output="y"
+
 #CONFIG version
 #DO NOT CHANGE
-config_ver="1.5"
+config_ver="1.6"
