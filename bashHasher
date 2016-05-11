@@ -258,7 +258,7 @@ net="-"
 echo "$net"
 continue
 fi
-elif [ "$service_test" == "hashpower" ]
+elif [ "$service_test" == "zpool" ] || [ "$service_test" == "hashpower" ]
 then
 coin_test=$($script_path/JSON.sh/JSON.sh -x "\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"coins\"" -var <<< "${service_api_fetched[${service_test}]}")
 if [ -z "$coin_test" ]
