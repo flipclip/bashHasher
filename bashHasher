@@ -276,6 +276,11 @@ continue
 else
 if [ ! -z "${logging+1}" ] ; then echo "$log_time $service_test has $coin_test coins using ${algo_array[$i]}." >> $script_path/log ; fi
 pay=$($script_path/JSON.sh/JSON.sh -x "\"${service_api_calls[$service_test${algo_array[$i]}]}\",\"estimate_current\"" -var <<< "${service_api_fetched[${service_test}]}")
+if [ "$service_test" == "zpool" ]
+then
+pay_temp="${pay%\"}"
+pay="${pay_temp#\"}"
+fi
 fi
 fi
 gross=$(bc <<< "scale=9;$pay/${service_pay_rate[$service_test]}*${hash_calls[${algo_array[$i]}]}")
