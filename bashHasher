@@ -62,7 +62,7 @@ case $i in
     shift
     ;;
     --skipdecred)
-    skip[lyra2v2]="1"
+    skip[decred]="1"
     shift
     ;;
     --debug)
