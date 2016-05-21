@@ -65,6 +65,10 @@ case $i in
     skip[decred]="1"
     shift
     ;;
+    --skipx17)
+    skip[x15]="1"
+    shift
+    ;;
     --debug)
     logging="1"
     shift
@@ -81,23 +85,23 @@ done
 
 log_time=$(date +"%m-%d-%y %T")
 largest=-10000
-declare -A hash_calls=( [x11]="$hash_x11" [x13]="$hash_x13" [x15]="$hash_x15" [neoscrypt]="$hash_neoscrypt" [quark]="$hash_quark" [qubit]="$hash_qubit" [keccak]="$hash_keccak" [lyra2v2]="$hash_lyra2v2" [decred]="$hash_decred")
-declare -A watt_calls=( [x11]="$watt_x11" [x13]="$watt_x13" [x15]="$watt_x15" [neoscrypt]="$watt_neoscrypt" [quark]="$watt_quark" [qubit]="$watt_qubit" [keccak]="$watt_keccak" [lyra2v2]="$watt_lyra2v2" [decred]="$watt_decred")
-declare -A intensity_calls=( [x11]="$inten_x11" [x13]="$inten_x13" [x15]="$inten_x15" [neoscrypt]="$inten_neoscrypt" [quark]="$inten_quark" [qubit]="$inten_qubit" [keccak]="$inten_keccak" [lyra2v2]="$inten_lyra2v2" [decred]="$inten_decred")
-declare -A gfx_calls=( [x11]="$gfx_x11" [x13]="$gfx_x13" [x15]="$gfx_x15" [neoscrypt]="$gfx_neoscrypt" [quark]="$gfx_quark" [qubit]="$gfx_qubit" [keccak]="$gfx_keccak" [lyra2v2]="$gfx_lyra2v2" [decred]="$gfx_decred")
-declare -A mem_calls=( [x11]="$mem_x11" [x13]="$mem_x13" [x15]="$mem_x15" [neoscrypt]="$mem_neoscrypt" [quark]="$mem_quark" [qubit]="$mem_qubit" [keccak]="$mem_keccak" [lyra2v2]="$mem_lyra2v2" [decred]="$mem_decred")
+declare -A hash_calls=( [x11]="$hash_x11" [x13]="$hash_x13" [x15]="$hash_x15" [neoscrypt]="$hash_neoscrypt" [quark]="$hash_quark" [qubit]="$hash_qubit" [keccak]="$hash_keccak" [lyra2v2]="$hash_lyra2v2" [decred]="$hash_decred" [x17]="$hash_x17")
+declare -A watt_calls=( [x11]="$watt_x11" [x13]="$watt_x13" [x15]="$watt_x15" [neoscrypt]="$watt_neoscrypt" [quark]="$watt_quark" [qubit]="$watt_qubit" [keccak]="$watt_keccak" [lyra2v2]="$watt_lyra2v2" [decred]="$watt_decred" [x17]="$hash_x17")
+declare -A intensity_calls=( [x11]="$inten_x11" [x13]="$inten_x13" [x15]="$inten_x15" [neoscrypt]="$inten_neoscrypt" [quark]="$inten_quark" [qubit]="$inten_qubit" [keccak]="$inten_keccak" [lyra2v2]="$inten_lyra2v2" [decred]="$inten_decred" [x17]="$inten_x17")
+declare -A gfx_calls=( [x11]="$gfx_x11" [x13]="$gfx_x13" [x15]="$gfx_x15" [neoscrypt]="$gfx_neoscrypt" [quark]="$gfx_quark" [qubit]="$gfx_qubit" [keccak]="$gfx_keccak" [lyra2v2]="$gfx_lyra2v2" [decred]="$gfx_decred" [x17]="$gfx_x17")
+declare -A mem_calls=( [x11]="$mem_x11" [x13]="$mem_x13" [x15]="$mem_x15" [neoscrypt]="$mem_neoscrypt" [quark]="$mem_quark" [qubit]="$mem_qubit" [keccak]="$mem_keccak" [lyra2v2]="$mem_lyra2v2" [decred]="$mem_decred" [x17]="$mem_x17")
 bpi_api_addr="https://api.coindesk.com/v1/bpi/currentprice/$currency.json"
 nicehash_api_addr="https://www.nicehash.com/api?method=stats.global.current"
 zpool_api_addr="http://www.zpool.ca/api/status"
 hashpower_api_addr="http://hashpower.co/api/status"
 miner_path="$miner_path/$miner_name"
 
-algo_array=(x11 x13 x15 neoscrypt quark qubit keccak lyra2v2 decred)
+algo_array=(x11 x13 x15 neoscrypt quark qubit keccak lyra2v2 decred x17)
 service_calls=(bpi nicehash zpool hashpower)
-declare -A service_api_calls=( [nicehashx11]="3" [nicehashx13]="4" [nicehashkeccak]="5" [nicehashx15]="6" [nicehashneoscrypt]="8" [nicehashqubit]="11" [nicehashquark]="12" [nicehashlyra2v2]="14" [zpoolx11]="x11" [zpoolx13]="x13" [zpoolx15]="x15" [zpoolneoscrypt]="neoscrypt" [zpoollyra2v2]="lyra2v2" [zpoolquark]="quark" [zpoolqubit]="qubit" [zpooldecred]="decred" [hashpowerx11]="x11" [hashpowerneoscrypt]="neoscrypt" [hashpowerquark]="quark" [hashpowerqubit]="qubit" [hashpowerlyra2v2]="lyra2v2")
+declare -A service_api_calls=( [nicehashx11]="3" [nicehashx13]="4" [nicehashkeccak]="5" [nicehashx15]="6" [nicehashneoscrypt]="8" [nicehashqubit]="11" [nicehashquark]="12" [nicehashlyra2v2]="14" [zpoolx11]="x11" [zpoolx13]="x13" [zpoolx15]="x15" [zpoolneoscrypt]="neoscrypt" [zpoollyra2v2]="lyra2v2" [zpoolquark]="quark" [zpoolqubit]="qubit" [zpooldecred]="decred" [zpoolqubit]="x17" [hashpowerx11]="x11" [hashpowerneoscrypt]="neoscrypt" [hashpowerquark]="quark" [hashpowerqubit]="qubit" [hashpowerlyra2v2]="lyra2v2")
 declare -A service_url=( [nicehash]=$nicehash_url [zpool]=$zpool_url [hashpower]=$hashpower_url)
 declare -A service_pay_rate=( [nicehash]=1000000 [zpool]=1000 [hashpower]=1000)
-declare -A service_port=( [nicehashx11]=3336 [nicehashx13]=3337 [nicehashkeccak]=3338 [nicehashx15]=3339 [nicehashneoscrypt]=3341 [nicehashqubit]=3344 [nicehashquark]=3345 [nicehashlyra2v2]=3347 [zpoolx11]=3533 [zpoolx13]=3633 [zpoolx15]=3733 [zpoolneoscrypt]=4233 [zpoollyra2v2]=4533 [zpoolquark]=4033 [zpoolqubit]=4733 [zpooldecred]=5744 [hashpowerx11]=3533 [hashpowerneoscrypt]=4233 [hashpowerquark]=4033 [hashpowerqubit]=4733 [hashpowerlyra2v2]=5433)
+declare -A service_port=( [nicehashx11]=3336 [nicehashx13]=3337 [nicehashkeccak]=3338 [nicehashx15]=3339 [nicehashneoscrypt]=3341 [nicehashqubit]=3344 [nicehashquark]=3345 [nicehashlyra2v2]=3347 [zpoolx11]=3533 [zpoolx13]=3633 [zpoolx15]=3733 [zpoolneoscrypt]=4233 [zpoollyra2v2]=4533 [zpoolquark]=4033 [zpoolqubit]=4733 [zpooldecred]=5744 [zpoolx17]=3737 [hashpowerx11]=3533 [hashpowerneoscrypt]=4233 [hashpowerquark]=4033 [hashpowerqubit]=4733 [hashpowerlyra2v2]=5433)
 declare -A service_api_addr=( [bpi]=$bpi_api_addr [nicehash]=$nicehash_api_addr [zpool]=$zpool_api_addr [hashpower]=$hashpower_api_addr )
 declare -A service_api_fetched
 service_api_len=${#service_api_addr[@]}
