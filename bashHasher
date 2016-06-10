@@ -29,28 +29,24 @@ case $i in
     skip[hashpower]="1"
     shift
     ;;
-    --skipx11)
-    skip[x11]="1"
+    --skipblake2s)
+    skip[blake2s]="1"
     shift
     ;;
-    --skipx13)
-    skip[x13]="1"
+    --skipblakecoin)
+    skip[blakecoin]="1"
     shift
     ;;
-    --skipx15)
-    skip[x15]="1"
+    --skipc11)
+    skip[c11]="1"
     shift
     ;;
-    --skipneoscrypt)
-    skip[neoscrypt]="1"
+    --skipdecred)
+    skip[decred]="1"
     shift
     ;;
-    --skipquark)
-    skip[quark]="1"
-    shift
-    ;;
-    --skipqubit)
-    skip[qubit]="1"
+    --skipgroestl)
+    skip[groestl]="1"
     shift
     ;;
     --skipkeccak)
@@ -61,12 +57,56 @@ case $i in
     skip[lyra2v2]="1"
     shift
     ;;
-    --skipdecred)
-    skip[decred]="1"
+    --skipmyr-gr)
+    skip[myr-gr]="1"
+    shift
+    ;;
+    --skipneoscrypt)
+    skip[neoscrypt]="1"
+    shift
+    ;;
+    --skipnist5)
+    skip[nist5]="1"
+    shift
+    ;;
+    --skipquark)
+    skip[quark]="1"
+    shift
+    ;;
+    --skipqubit)
+    skip[qubit]="1"
+    shift
+    ;;
+    --skipsib)
+    skip[sib]="1"
+    shift
+    ;;
+    --skipskein)
+    skip[skein]="1"
+    shift
+    ;;
+    --skipx11evo)
+    skip[x11evo]="1"
+    shift
+    ;;
+    --skipx11)
+    skip[x11]="1"
+    shift
+    ;;
+    --skipx13)
+    skip[x13]="1"
+    shift
+    ;;
+    --skipx14)
+    skip[x14]="1"
+    shift
+    ;;   
+    --skipx15)
+    skip[x15]="1"
     shift
     ;;
     --skipx17)
-    skip[x15]="1"
+    skip[x17]="1"
     shift
     ;;
     --debug)
@@ -85,23 +125,23 @@ done
 
 log_time=$(date +"%m-%d-%y %T")
 largest=-10000
-declare -A hash_calls=( [x11]="$hash_x11" [x13]="$hash_x13" [x15]="$hash_x15" [neoscrypt]="$hash_neoscrypt" [quark]="$hash_quark" [qubit]="$hash_qubit" [keccak]="$hash_keccak" [lyra2v2]="$hash_lyra2v2" [decred]="$hash_decred" [x17]="$hash_x17")
-declare -A watt_calls=( [x11]="$watt_x11" [x13]="$watt_x13" [x15]="$watt_x15" [neoscrypt]="$watt_neoscrypt" [quark]="$watt_quark" [qubit]="$watt_qubit" [keccak]="$watt_keccak" [lyra2v2]="$watt_lyra2v2" [decred]="$watt_decred" [x17]="$hash_x17")
-declare -A intensity_calls=( [x11]="$inten_x11" [x13]="$inten_x13" [x15]="$inten_x15" [neoscrypt]="$inten_neoscrypt" [quark]="$inten_quark" [qubit]="$inten_qubit" [keccak]="$inten_keccak" [lyra2v2]="$inten_lyra2v2" [decred]="$inten_decred" [x17]="$inten_x17")
-declare -A gfx_calls=( [x11]="$gfx_x11" [x13]="$gfx_x13" [x15]="$gfx_x15" [neoscrypt]="$gfx_neoscrypt" [quark]="$gfx_quark" [qubit]="$gfx_qubit" [keccak]="$gfx_keccak" [lyra2v2]="$gfx_lyra2v2" [decred]="$gfx_decred" [x17]="$gfx_x17")
-declare -A mem_calls=( [x11]="$mem_x11" [x13]="$mem_x13" [x15]="$mem_x15" [neoscrypt]="$mem_neoscrypt" [quark]="$mem_quark" [qubit]="$mem_qubit" [keccak]="$mem_keccak" [lyra2v2]="$mem_lyra2v2" [decred]="$mem_decred" [x17]="$mem_x17")
+declare -A hash_calls=( [blake2s]="$hash_blake2s" [blakecoin]="$hash_blakecoin" [c11]="$hash_c11" [decred]="$hash_decred" [groestl]="$hash_groestl" [keccak]="$hash_keccak" [lyra2v2]="$hash_lyra2v2" [myr-gr]="$hash_myr-gr" [neoscrypt]="$hash_neoscrypt" [nist5]="$hash_nist5" [quark]="$hash_quark" [qubit]="$hash_qubit" [sib]="$hash_sib" [skein]="$hash_skein" [x11evo]="$hash_x11evo" [x11]="$hash_x11" [x13]="$hash_x13" [x14]="$hash_x14" [x15]="$hash_x15" [x17]="$hash_x17")
+declare -A watt_calls=( [blake2s]="$watt_blake2s" [blakecoin]="$watt_blakecoin" [c11]="$watt_c11" [decred]="$watt_decred" [groestl]="$watt_groestl" [keccak]="$watt_keccak" [lyra2v2]="$watt_lyra2v2" [myr-gr]="$watt_myr-gr" [neoscrypt]="$watt_neoscrypt" [nist5]="$watt_nist5" [quark]="$watt_quark" [qubit]="$watt_qubit" [sib]="$watt_sib" [skein]="$watt_skein" [x11evo]="$watt_x11evo" [x11]="$watt_x11" [x13]="$watt_x13" [x14]="$watt_x14" [x15]="$watt_x15" [x17]="$watt_x17")
+declare -A intensity_calls=( [blake2s]="$inten_blake2s" [blakecoin]="$inten_blakecoin" [c11]="$inten_c11" [decred]="$inten_decred" [groestl]="$inten_groestl" [keccak]="$inten_keccak" [lyra2v2]="$inten_lyra2v2" [myr-gr]="$inten_myr-gr" [neoscrypt]="$inten_neoscrypt" [nist5]="$inten_nist5" [quark]="$inten_quark" [qubit]="$inten_qubit" [sib]="$inten_sib" [skein]="$inten_skein" [x11evo]="$inten_x11evo" [x11]="$inten_x11" [x13]="$inten_x13" [x14]="$inten_x14" [x15]="$inten_x15" [x17]="$inten_x17")
+declare -A gfx_calls=( [blake2s]="$gfx_blake2s" [blakecoin]="$gfx_blakecoin" [c11]="$gfx_c11" [decred]="$gfx_decred" [groestl]="$gfx_groestl" [keccak]="$gfx_keccak" [lyra2v2]="$gfx_lyra2v2" [myr-gr]="$gfx_myr-gr" [neoscrypt]="$gfx_neoscrypt" [nist5]="$gfx_nist5" [quark]="$gfx_quark" [qubit]="$gfx_qubit" [sib]="$gfx_sib" [skein]="$gfx_skein" [x11evo]="$gfx_x11evo" [x11]="$gfx_x11" [x13]="$gfx_x13" [x14]="$gfx_x14" [x15]="$gfx_x15" [x17]="$gfx_x17")
+declare -A mem_calls=( [blake2s]="$mem_blake2s" [blakecoin]="$mem_blakecoin" [c11]="$mem_c11" [decred]="$mem_decred" [groestl]="$mem_groestl" [keccak]="$mem_keccak" [lyra2v2]="$mem_lyra2v2" [myr-gr]="$mem_myr-gr" [neoscrypt]="$mem_neoscrypt" [nist5]="$mem_nist5" [quark]="$mem_quark" [qubit]="$mem_qubit" [sib]="$mem_sib" [skein]="$mem_skein" [x11evo]="$mem_x11evo" [x11]="$mem_x11" [x13]="$mem_x13" [x14]="$mem_x14" [x15]="$mem_x15" [x17]="$mem_x17")
 bpi_api_addr="https://api.coindesk.com/v1/bpi/currentprice/$currency.json"
 nicehash_api_addr="https://www.nicehash.com/api?method=stats.global.current"
 zpool_api_addr="http://www.zpool.ca/api/status"
 hashpower_api_addr="http://hashpower.co/api/status"
 miner_path="$miner_path/$miner_name"
 
-algo_array=(x11 x13 x15 neoscrypt quark qubit keccak lyra2v2 decred x17)
+algo_array=(blake2s blakecoin c11 decred groestl keccak lyra2v2 myr-gr neoscrypt nist5 quark qubit sib skein x11evo x11 x13 x14 x15 x17)
 service_calls=(bpi nicehash zpool hashpower)
-declare -A service_api_calls=( [nicehashx11]="3" [nicehashx13]="4" [nicehashkeccak]="5" [nicehashx15]="6" [nicehashneoscrypt]="8" [nicehashqubit]="11" [nicehashquark]="12" [nicehashlyra2v2]="14" [zpoolx11]="x11" [zpoolx13]="x13" [zpoolx15]="x15" [zpoolneoscrypt]="neoscrypt" [zpoollyra2v2]="lyra2v2" [zpoolquark]="quark" [zpoolqubit]="qubit" [zpooldecred]="decred" [zpoolqubit]="x17" [hashpowerx11]="x11" [hashpowerneoscrypt]="neoscrypt" [hashpowerquark]="quark" [hashpowerqubit]="qubit" [hashpowerlyra2v2]="lyra2v2")
+declare -A service_api_calls=( [nicehashdecred]="21" [nicehashkeccak]="5" [nicehashlyra2v2]="14" [nicehashneoscrypt]="8" [nicehashqubit]="11" [nicehashquark]="12" [nicehashx11]="3" [nicehashx13]="4" [nicehashx15]="6" [zpoolblake2s]="blake2s" [zpoolblakecoin]="blakecoin" [zpoolc11]="c11" [zpooldecred]="decred" [zpoolgroestl]="groestl" [zpoollyra2v2]="lyra2v2" [zpoolmyr-gr]="myr-gr" [zpoolneoscrypt]="neoscrypt" [zpoolnist5]="nist5" [zpoolquark]="quark" [zpoolqubit]="qubit" [zpoolsib]="sib" [zpoolskein]="skein" [zpoolx11evo]="x11evo" [zpoolx11]="x11" [zpoolx13]="x13" [zpoolx14]="x14" [zpoolx15]="x15" [zpoolx17]="x17" [hashpowerx11]="x11" [hashpowerneoscrypt]="neoscrypt" [hashpowerquark]="quark" [hashpowerqubit]="qubit" [hashpowerlyra2v2]="lyra2v2")
 declare -A service_url=( [nicehash]=$nicehash_url [zpool]=$zpool_url [hashpower]=$hashpower_url)
 declare -A service_pay_rate=( [nicehash]=1000000 [zpool]=1000 [hashpower]=1000)
-declare -A service_port=( [nicehashx11]=3336 [nicehashx13]=3337 [nicehashkeccak]=3338 [nicehashx15]=3339 [nicehashneoscrypt]=3341 [nicehashqubit]=3344 [nicehashquark]=3345 [nicehashlyra2v2]=3347 [zpoolx11]=3533 [zpoolx13]=3633 [zpoolx15]=3733 [zpoolneoscrypt]=4233 [zpoollyra2v2]=4533 [zpoolquark]=4033 [zpoolqubit]=4733 [zpooldecred]=5744 [zpoolx17]=3737 [hashpowerx11]=3533 [hashpowerneoscrypt]=4233 [hashpowerquark]=4033 [hashpowerqubit]=4733 [hashpowerlyra2v2]=5433)
+declare -A service_port=( [nicehashdecred]=3354 [nicehashkeccak]=3338 [nicehashlyra2v2]=3347 [nicehashneoscrypt]=3341 [nicehashqubit]=3344 [nicehashquark]=3345 [nicehashx11]=3336 [nicehashx13]=3337 [nicehashx15]=3339 [zpoolblake2s]=5766 [zpoolblakecoin]=5743 [zpooldecred]=5744 [zpoolc11]=3573 [zpoolgroestl]=5333 [zpoollyra2v2]=4533 [zpoolmyr-gr]=5433 [zpoolneoscrypt]=4233 [zpoolnist5]=3833 [zpoolquark]=4033 [zpoolqubit]=4733 [zpoolsib]=5033 [zpoolskein]=4933 [zpoolx11evo]=3553 [zpoolx11]=3533 [zpoolx13]=3633 [zpoolx14]=3933 [zpoolx15]=3733 [zpoolx17]=3737 [hashpowerx11]=3533 [hashpowerneoscrypt]=4233 [hashpowerquark]=4033 [hashpowerqubit]=4733 [hashpowerlyra2v2]=5433)
 declare -A service_api_addr=( [bpi]=$bpi_api_addr [nicehash]=$nicehash_api_addr [zpool]=$zpool_api_addr [hashpower]=$hashpower_api_addr )
 declare -A service_api_fetched
 service_api_len=${#service_api_addr[@]}
